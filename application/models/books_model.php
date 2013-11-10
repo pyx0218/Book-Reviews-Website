@@ -9,7 +9,8 @@ class Books_model extends CI_Model {
   public function get_books($isbn = FALSE){
   if ($isbn === FALSE)
   {
-    $query = $this->db->get('Books');
+    $query = $this->db->query('select * from Books');
+	//$query = $this->db->get('Books');
     return $query->result_array();
   }
   

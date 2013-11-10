@@ -181,10 +181,7 @@ class CI_DB_oci8_driver extends CI_DB {
 	 */
 	private function _set_stmt_id($sql)
 	{
-		if ( ! is_resource($this->stmt_id))
-		{
-			$this->stmt_id = oci_parse($this->conn_id, $this->_prep_query($sql));
-		}
+		$this->stmt_id = oci_parse($this->conn_id, $this->_prep_query($sql));
 	}
 
 	// --------------------------------------------------------------------
