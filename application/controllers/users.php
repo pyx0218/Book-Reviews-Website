@@ -13,8 +13,8 @@ class Users extends CI_Controller {
 	$this->load->library('form_validation');
 	
 	$data['title'] = 'Log In';
-	$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[4]|xss_clean');
-	$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[32]');
+	$this->form_validation->set_rules('username', 'Username', 'required|xss_clean');
+	$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[32]');
 	
 	if ($this->form_validation->run() === FALSE){
 		$this->load->view('templates/header', $data);  
@@ -40,9 +40,10 @@ class Users extends CI_Controller {
 	$this->form_validation->set_rules('con_password', 'Password Confirmation', 'trim|required|matches[password]');
 
 	if($this->form_validation->run() == FALSE){
-	$this->load->view('users/registration_view');
+		$this->load->view('users/registration_view');
 	}
 	else{
+		$this->users_model->add_user();
 	}
  }
   

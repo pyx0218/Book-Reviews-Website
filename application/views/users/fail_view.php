@@ -1,3 +1,3 @@
 <html>
 <body>
-  <h1>Fail to login.</h1>
+  <h1>Wrong combination of username and password. Please retry.</h1>

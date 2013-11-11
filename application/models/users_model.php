@@ -6,17 +6,17 @@ class Users_model extends CI_Model {
 	}
   
 	function login($username,$password){
-		$this->db->where("uname",$username);
-		$this->db->where("pwd",$password);
+		$this->db->where("UNAME",$username);
+		$this->db->where("PWD",$password);
 
 		$query=$this->db->get("users");
-		if($query->num_rows()>0){
+		if($query->num_rows()>0){	
 			foreach($query->result() as $rows){
 				//add all data to session
 				$newdata = array(
-				'user_id'  => $rows->user_id,
-				'user_name'  => $rows->uname,
-				'logged_in'  => TRUE
+				'user_id'  => $rows->USER_ID,
+				'user_name'  => $rows->UNAME,
+				'logged_in'  => TRUE,
 				);
 			}
 			$this->session->set_userdata($newdata);
@@ -26,9 +26,9 @@ class Users_model extends CI_Model {
 	}
 	public function add_user(){
 		$data=array(
-		'uname'=>$this->input->post('user_name'),
-		'pwd'=>md5($this->input->post('password'))
+		'UNAME'=>$this->input->post('user_name'),
+		'PWD'=>($this->input->post('password'))
 		);
-		$this->db->insert('users',$data);
+		$this->db->insert('USERS',$data);
 	}
 }
