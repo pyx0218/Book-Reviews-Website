@@ -20,11 +20,13 @@ class Users extends CI_Controller {
 		$this->load->view('templates/header', $data);  
 		$this->load->view('users/login_view');
 		$this->load->view('templates/footer');
+		
 	}
 	else{
 		$result = $this->users_model->login($this->input->post('username'), $this->input->post('password'));
 		if($result){
-			$this->load->view('users/success_view');
+			//$this->load->view('users/success_view');
+			redirect('/users/view/');
 		}
 		else{
 			$this->load->view('users/fail_view');
@@ -51,7 +53,8 @@ class Users extends CI_Controller {
 
   public function view()
   {
-
-  $this->load->view('templates/footer');
+	$data = $this->users_model->user_info();
+	$this->load->view('templates/footer');
+	$this->load->view('users/success_view', $data);
   }
 }
