@@ -9,12 +9,33 @@ class Books extends CI_Controller {
 
   public function index()
   {
-    $data['books'] = $this->books_model->get_books();
-	$data['title'] = 'Search results';
-
-  $this->load->view('templates/header', $data);
-  $this->load->view('books/index', $data);
-  $this->load->view('templates/footer');
+  $this->load->helper('form');
+  $this->load->library('form_validation');
+	$data['title'] = 'Home';
+    $this->load->view('templates/header', $data);  
+    $this->load->view('books/index');
+    $this->load->view('templates/footer');
+  }
+  
+  public function search()
+  {
+	$this->load->helper('form');
+  
+	$keyword = $this->input->post('keyword');
+	$data['keyword'] = $keyword;
+	if(!$keyword){
+		$data['title'] = 'Search: All';
+		$data['books'] = $this->books_model->search_books();
+	}
+	else{
+		$data['title'] = 'Search:'.$keyword;
+		$data['books'] = $this->books_model->search_books($keyword);
+	}
+	$this->load->view('templates/header', $data);  
+    $this->load->view('books/search', $data);
+	$this->load->view('books/result', $data);
+	$this->load->view('templates/footer');
+    
   }
 
   public function view($isbn)
@@ -26,10 +47,12 @@ class Books extends CI_Controller {
     show_404();
   }
 
-  $data['title'] = $data['books_item']['bname'];
+  $data['title'] = $data['books_item']['BNAME'];
 
   $this->load->view('templates/header', $data);
   $this->load->view('books/view', $data);
   $this->load->view('templates/footer');
   }
+  
+  
 }
