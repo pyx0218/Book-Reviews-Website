@@ -12,7 +12,7 @@ class Books extends CI_Controller {
   $this->load->helper('form');
   $this->load->library('form_validation');
 	$data['title'] = 'Home';
-    $this->load->view('templates/header', $data);  
+    $this->load->view('books/header', $data);  
     $this->load->view('books/index');
     $this->load->view('templates/footer');
   }
@@ -31,7 +31,7 @@ class Books extends CI_Controller {
 		$data['title'] = 'Search:'.$keyword;
 		$data['books'] = $this->books_model->search_books($keyword);
 	}
-	$this->load->view('templates/header', $data);  
+	$this->load->view('books/header', $data);  
     $this->load->view('books/search', $data);
 	$this->load->view('books/result', $data);
 	$this->load->view('templates/footer');
@@ -40,7 +40,7 @@ class Books extends CI_Controller {
 
   public function view($isbn)
   {
-    $data['books_item'] = $this->books_model->get_books($isbn);
+    $data['books_item'] = $this->books_model->get_book_information($isbn);
 	
 	 if (empty($data['books_item']))
   {
@@ -49,7 +49,7 @@ class Books extends CI_Controller {
 
   $data['title'] = $data['books_item']['BNAME'];
 
-  $this->load->view('templates/header', $data);
+  $this->load->view('books/header', $data);
   $this->load->view('books/view', $data);
   $this->load->view('templates/footer');
   }

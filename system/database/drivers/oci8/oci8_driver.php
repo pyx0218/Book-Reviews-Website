@@ -606,7 +606,8 @@ class CI_DB_oci8_driver extends CI_DB {
 				$str =  ltrim($str,'"');
 				$str =  str_replace('"."', '.', $str);
 
-				return $str;
+				//return $str;
+				return $item;
 	}
 
 	// --------------------------------------------------------------------
