@@ -5,9 +5,9 @@ class Users_model extends CI_Model {
 		$this->load->database();
 	}
   
-	function login($email,$password){
-		$this->db->where("email",$email);
-		$this->db->where("password",$password);
+	function login($username,$password){
+		$this->db->where("uname",$username);
+		$this->db->where("pwd",$password);
 
 		$query=$this->db->get("users");
 		if($query->num_rows()>0){

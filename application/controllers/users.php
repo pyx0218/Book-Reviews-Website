@@ -23,7 +23,7 @@ class Users extends CI_Controller {
 	}
 	else{
 		$result = $this->users_model->login($this->input->post('username'), $this->input->post('password'));
-		if(result){
+		if($result){
 			$this->load->view('users/success_view');
 		}
 		else{
