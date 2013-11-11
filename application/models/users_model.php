@@ -7,9 +7,9 @@ class Users_model extends CI_Model {
 	}
   
 	function login($username,$password){
-		$this->db->where("UNAME",$username);
+		$this->db->where('UNAME', $username);
 		$this->db->where("PWD",$password);
-
+		
 		$query=$this->db->get("users");
 		if($query->num_rows()>0){	
 			foreach($query->result() as $rows){
@@ -19,6 +19,13 @@ class Users_model extends CI_Model {
 				'user_name'  => $rows->UNAME,
 				'logged_in'  => TRUE,
 				);
+				
+				if($this->db->query('SELECT * from administrator A where '.$rows->USER_ID.'=A.aid')->num_rows() != 0){
+					$newdata['admin'] = TRUE;
+				}
+				else{
+					$newdata['admin'] = FALSE;
+				}
 			}
 			$this->session->set_userdata($newdata);
 			return true;
@@ -84,7 +91,24 @@ class Users_model extends CI_Model {
 			'reading' => $reading,
 			'read' => $read,
 			'wantstoread' => $wantstoread,);
-		echo $data['friends'][0];
+		if($this->session->userdata('admin')){
+			$idx = 0;
+			$monitors = array();
+			$query = $this->db->query('
+				select R.rtitle, M.mdate, M.operation, M.reason
+				from monitors M, Review_generatedfrom R
+				where M.aid = '.$user_id.' and M.rid = R.rid
+			');
+			foreach ($query->result() as $row){
+				$monitors[$idx++] = array(
+					'date' => $row->MDATE,
+					'title' => $row->RTITLE,
+					'reason' => $row->REASON,
+					'operation' => $row->OPERATION,
+				);
+			}
+		}
+		$data['monitors'] = $monitors;
 		return $data;
 	}
 	

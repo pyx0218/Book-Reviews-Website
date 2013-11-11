@@ -54,7 +54,8 @@ class Users extends CI_Controller {
   public function view()
   {
 	$data = $this->users_model->user_info();
-	$this->load->view('templates/footer');
+	
 	$this->load->view('users/success_view', $data);
+	$this->load->view('templates/footer');
   }
 }
