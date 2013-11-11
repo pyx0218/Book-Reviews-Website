@@ -1,8 +1,9 @@
-﻿<?php echo validation_errors() ?>
-<?php echo form_open('books/search') ?>
+<?php foreach ($books as $books_item): ?>
 
-  <label for="keyword">I want to read</label> 
-  <input type="search" name="keyword" placeholder='Book name, author, ISBN, tag'/>
-  <input type="submit" name="submit" value="Search" /> 
+    <h2><?php echo $books_item['bname'] ?></h2>
+    <div id="main">
+        <?php echo $books_item['publisher'] ?>
+    </div>
+    <p><a href="http://localhost/index.php/books/<?php echo $books_item['isbn'] ?>">View book</a></p>
 
-</form>
+<?php endforeach ?>

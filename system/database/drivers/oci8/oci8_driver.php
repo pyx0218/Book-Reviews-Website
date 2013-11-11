@@ -1,4 +1,4 @@
-﻿<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
@@ -581,13 +581,7 @@ class CI_DB_oci8_driver extends CI_DB {
 				$str = $this->_escape_char. str_replace('.', $this->_escape_char.'.', $item);
 
 				// remove duplicates if the user already included the escape
-				$str = preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
-				$str =  rtrim($str,'"');
-				$str =  ltrim($str,'"');
-				$str =  str_replace('"."', '.', $str);
-
-				return $str;
-
+				return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
 			}
 		}
 
@@ -601,12 +595,7 @@ class CI_DB_oci8_driver extends CI_DB {
 		}
 
 		// remove duplicates if the user already included the escape
-		$str = preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
-				$str =  rtrim($str,'"');
-				$str =  ltrim($str,'"');
-				$str =  str_replace('"."', '.', $str);
-
-				return $str;
+		return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
 	}
 
 	// --------------------------------------------------------------------
