@@ -401,13 +401,13 @@ class CI_DB_oci8_driver extends CI_DB {
 		}
 
 		$str = remove_invisible_characters($str);
-
+		//$str = str_replace("'", "''", $str);  
 		// escape LIKE condition wildcards
 		if ($like === TRUE)
 		{
-			$str = str_replace(	array('%', '_', $this->_like_escape_chr),
-								array($this->_like_escape_chr.'%', $this->_like_escape_chr.'_', $this->_like_escape_chr.$this->_like_escape_chr),
-								$str);
+			$str = str_replace( array('%', '_', $this->_like_escape_chr),
+                                array($this->_like_escape_chr.'%', $this->_like_escape_chr.'_', $this->_like_escape_chr.$this->_like_escape_chr),
+                                $str); 
 		}
 
 		return $str;
