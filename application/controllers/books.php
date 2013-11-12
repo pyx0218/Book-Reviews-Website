@@ -9,12 +9,23 @@ class Books extends CI_Controller {
 
   public function index()
   {
-  $this->load->helper('form');
-  $this->load->library('form_validation');
-	$data['title'] = 'Home';
-    $this->load->view('books/header', $data);  
-    $this->load->view('books/index');
-    $this->load->view('templates/footer');
+    $this->load->helper('form');
+    $this->load->library('form_validation');
+	
+	if($this->session->userdata('logged_in')){
+		$data['title'] = 'Home';
+		$data['user_name'] = $this->session->userdata('user_name');
+		$this->load->view('books/header', $data);  
+		$this->load->view('books/index');
+		$this->load->view('templates/footer');
+	}
+	else{
+		$data['title'] = 'Log In';
+		$this->load->view('templates/header', $data);  
+		$this->load->view('users/login_view');
+		$this->load->view('templates/footer');
+	}
+   
   }
   
   public function search()
@@ -40,18 +51,26 @@ class Books extends CI_Controller {
 
   public function view($isbn)
   {
-    $data['books_item'] = $this->books_model->get_book_information($isbn);
+   if($this->session->userdata('logged_in')){
+	  $data['user_name'] = $this->session->userdata('user_name');
+	  $data['books_item'] = $this->books_model->get_book_information($isbn);
 	
-	 if (empty($data['books_item']))
-  {
-    show_404();
-  }
+	  if (empty($data['books_item']))
+		show_404();
 
-  $data['title'] = $data['books_item']['BNAME'];
+	  $data['title'] = $data['books_item']['BNAME'];
 
-  $this->load->view('books/header', $data);
-  $this->load->view('books/view', $data);
-  $this->load->view('templates/footer');
+	  $this->load->view('books/header', $data);
+	  $this->load->view('books/view', $data);
+	  $this->load->view('templates/footer');
+	}
+	else{
+		$data['title'] = 'Log In';
+		$this->load->view('templates/header', $data);  
+		$this->load->view('users/login_view');
+		$this->load->view('templates/footer');
+	}
+    
   }
   
   

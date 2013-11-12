@@ -123,6 +123,19 @@ class Books_model extends CI_Model {
 		return $query->result_array();
 	}
 	
+	public function get_book_like_also_like($isbn){
+		$user_ids = "select USER_ID from WantsToRead where ISBN='".$isbn."' union select USER_ID from Reading where ISBN='".$isbn."' union select USER_ID from Read where ISBN='".$isbn."'";
+		$isbns = 'select ISBN from WantsToRead where USER_ID in ('.$user_ids.') union select ISBN from Reading where USER_ID in ('.$user_ids.') union select ISBN from Read where USER_ID in ('.$user_ids.')';
+		$query = $this->db->query("select distinct ISBN from (".$isbns.") where ISBN <> '".$isbn."'");
+		$x=0;
+	    foreach($query->result_array() as $row){
+			$books[$x]=$this->books_model->get_book($row['ISBN']);
+			$books[$x]['AUTHORS']=$this->books_model->get_book_authors_name($row['ISBN']);
+			$x++;
+		}
+		return $books;
+	}
+	
 	public function get_book_tags($isbn){
 		$this->db->select('TNAME');
 		$query = $this->db->get_where('BelongsTo',array('ISBN'=>$isbn));
@@ -137,6 +150,7 @@ class Books_model extends CI_Model {
 		$info['TAGS'] = $this->books_model->get_book_tags($isbn);
 		$info['REVIEWS'] = $this->books_model->get_book_reviews($isbn);
 		$info['NOTES'] = $this->books_model->get_book_friend_notes($isbn);
+		$info['RECOMBOOKS'] = $this->books_model->get_book_like_also_like($isbn);
 		return $info;
 	}
 }
