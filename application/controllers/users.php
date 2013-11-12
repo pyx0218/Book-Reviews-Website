@@ -25,7 +25,7 @@ class Users extends CI_Controller {
 		$result = $this->users_model->login($this->input->post('username'), $this->input->post('password'));
 		if($result){
 			//$this->load->view('users/success_view');
-			redirect('/users/view/');
+			redirect('/books/search/');
 		}
 		else{
 			$this->load->view('users/fail_view');
@@ -50,9 +50,9 @@ class Users extends CI_Controller {
   
   
 
-	public function view(){
-		$data = $this->users_model->user_info();
-
+	public function view($user_id =''){
+		$data = $this->users_model->user_info($user_id);
+		
 		$this->load->view('users/personal_page_view', $data);
 		$this->load->view('templates/footer');
 	}

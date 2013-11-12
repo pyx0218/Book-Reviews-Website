@@ -40,19 +40,24 @@ class Users_model extends CI_Model {
 		$this->db->insert('USERS',$data);
 	}
 	
-	public function user_info(){
-		$user_id = $this->session->userdata('user_id');
+	public function user_info($user_id){
+		if($user_id ==''){
+			$user_id = $this->session->userdata('user_id');
+		}
 		$idx = 0;
 		$friends = array();
-		$query = $this->db->query('select distinct U.UNAME
+		$query = $this->db->query('select distinct U.UNAME, U.USER_ID
 			from USERS U, FRIENDOF F
 			WHERE F.USER_ID1 = '.$user_id.' AND F.USER_ID2 = U.USER_ID
 			UNION
-			select distinct U.UNAME
+			select distinct U.UNAME, U.USER_ID
 			from USERS U, FRIENDOF F
 			WHERE F.USER_ID2 = '.$user_id.' AND F.USER_ID1 = U.USER_ID');
 		foreach ($query->result() as $row){
-			$friends[$idx++] = $row->UNAME;
+			$friends[$idx++] = array(
+				'name' => $row->UNAME,
+				'user_id' => $row->USER_ID,
+			);
 		}
 		$idx = 0;
 		$reading = array();

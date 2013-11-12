@@ -36,9 +36,9 @@
 <div id="main">
 	<h3>My friends:</h3>
 	<p>
-	<?php foreach ($friends as $fname):?>
-		<?php echo $fname.'<br>' ?>
-	<?php endforeach ?>
+	<?php foreach ($friends as $fname){
+		echo '<a href="/index.php/users/view/'.$fname['user_id'].'">'.$fname['name'].'</a><br>';
+	}  ?>
 	</p>
 </div>
 <div>
