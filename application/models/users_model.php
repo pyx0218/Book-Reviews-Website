@@ -41,9 +41,39 @@ class Users_model extends CI_Model {
 	}
 	
 	public function user_info($user_id){
-		if($user_id ==''){
+		
+		if($user_id ==0){
 			$user_id = $this->session->userdata('user_id');
 		}
+		
+		$query = $this->db->query('
+			select * 
+			from administrator A
+			where A.aid = '.$user_id.'
+		');
+		
+		if ($query->num_rows() != 0){
+			$user = array(
+				'user_id' => $user_id,
+				'admin' => TRUE,
+			);
+		}
+		else{
+			$user = array(
+				'user_id' => $user_id,
+				'admin' => FALSE,
+			);
+		}
+		$query = $this->db->query('
+			select uname
+			from users U
+			where U.user_id = '.$user_id.'
+		');
+		
+		$row = $query->row();
+		
+		$user['name'] = $row->UNAME;
+		
 		$idx = 0;
 		$friends = array();
 		$query = $this->db->query('select distinct U.UNAME, U.USER_ID
@@ -92,11 +122,14 @@ class Users_model extends CI_Model {
 				'isbn' => $row->ISBN,
 			);
 		}
-		$data = array('friends' => $friends,
+		$data = array(
+			'user' => $user,
+			'friends' => $friends,
 			'reading' => $reading,
 			'read' => $read,
 			'wantstoread' => $wantstoread,);
-		if($this->session->userdata('admin')){
+		
+		if($this->session->userdata('admin') && $user['user_id'] == $this->session->userdata['user_id']){
 			$idx = 0;
 			$monitors = array();
 			$query = $this->db->query('

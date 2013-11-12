@@ -1,11 +1,12 @@
-<h2><?php echo $this->session->userdata('user_name');
-	if($this->session->userdata('admin')){
+<h2><?php 
+	echo $user['name'];
+	if($user['admin']){
 		echo' (Administrator)';
 	}
 ?></h2>
 
 <?php
-	if($this->session->userdata('admin')){
+	if($this->session->userdata('admin') && $user['user_id'] == $this->session->userdata['user_id']){
 		echo '<div>
 			<h3>My monitor operations:</h3>
 			<p><table border="1">
