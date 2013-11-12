@@ -16,7 +16,7 @@ class Users extends CI_Controller {
 	$this->form_validation->set_rules('username', 'Username', 'required|xss_clean');
 	$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[32]');
 	
-	if ($this->form_validation->run() === FALSE){
+	if ($this->form_validation->run() === FALSE){		//form syntax error
 		$this->load->view('templates/header', $data);  
 		$this->load->view('users/login_view');
 		$this->load->view('templates/footer');
@@ -27,8 +27,13 @@ class Users extends CI_Controller {
 			//$this->load->view('users/success_view');
 			redirect('books/');
 		}
-		else{
-			$this->load->view('users/fail_view');
+		else{			//unsucceed 
+			$data['title'] = 'Fail!';
+			$data['content'] = 'Wrong combination of username and password. Please try again!';
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/body', $data);
+			$this->load->view('users/login_view');
+			$this->load->view('templates/footer');
 		}
 	}
   }
@@ -45,6 +50,12 @@ class Users extends CI_Controller {
 	}
 	else{
 		$this->users_model->add_user();
+		$data['title'] = 'Succeed!';
+		$data['content'] = 'Congradulations! I have successfully finished registration!';
+		$this->load->view('templates/header', $data);
+		$this->load->view('templates/body', $data);
+		$this->load->view('users/login_view');
+		$this->load->view('templates/footer');
 	}
  }
   

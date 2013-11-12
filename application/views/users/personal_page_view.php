@@ -46,7 +46,7 @@
 	<h3>Books I'm reading now:</h3>
 	<p>
 	<?php foreach ($reading as $book){
-		echo '<a href="../books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
+		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
 	}
 	?>
 	</p>
@@ -55,7 +55,7 @@
 	<h3>Books I have already read:</h3>
 	<p>
 	<?php foreach ($read as $book){
-		echo '<a href="../books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
+		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
 	}
 	?>
 	</p>
@@ -64,7 +64,7 @@
 	<h3>Books I want to read:</h3>
 	<p>
 	<?php foreach ($wantstoread as $book){
-		echo '<a href="../books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
+		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
 	}
 	?>
 	</p>
