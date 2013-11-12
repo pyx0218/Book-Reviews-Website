@@ -1,4 +1,8 @@
-<h2><?php echo $this->session->userdata('user_name');?></h2>
+<h2><?php echo $this->session->userdata('user_name');
+	if($this->session->userdata('admin')){
+		echo' (Administrator)';
+	}
+?></h2>
 
 <?php
 	if($this->session->userdata('admin')){

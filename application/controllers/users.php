@@ -20,7 +20,6 @@ class Users extends CI_Controller {
 		$this->load->view('templates/header', $data);  
 		$this->load->view('users/login_view');
 		$this->load->view('templates/footer');
-		
 	}
 	else{
 		$result = $this->users_model->login($this->input->post('username'), $this->input->post('password'));
@@ -51,11 +50,40 @@ class Users extends CI_Controller {
   
   
 
-  public function view()
-  {
-	$data = $this->users_model->user_info();
+	public function view(){
+		$data = $this->users_model->user_info();
+
+		$this->load->view('users/personal_page_view', $data);
+		$this->load->view('templates/footer');
+	}
 	
-	$this->load->view('users/success_view', $data);
-	$this->load->view('templates/footer');
-  }
+	public function setting(){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[32]');
+		$this->form_validation->set_rules('con_password', 'Password Confirmation', 'trim|required|matches[password]');
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('users/setting_view');
+		}
+		else{
+			$this->users_model->setting();
+			$this->load->view('users/change_password_succeed');
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

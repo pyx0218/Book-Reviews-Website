@@ -107,18 +107,18 @@ class Users_model extends CI_Model {
 					'operation' => $row->OPERATION,
 				);
 			}
+			$data['monitors'] = $monitors;
 		}
-		$data['monitors'] = $monitors;
+		
 		return $data;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public function setting(){
+		$user_id = $this->session->userdata('user_id');
+		$this->db->query('
+			update USERS
+			set PWD = \''.$this->input->post('password').'\'
+			where USER_ID = '.$user_id.'
+		');
+	}
 }
