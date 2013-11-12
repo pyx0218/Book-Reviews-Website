@@ -25,7 +25,7 @@ class Users extends CI_Controller {
 		$result = $this->users_model->login($this->input->post('username'), $this->input->post('password'));
 		if($result){
 			//$this->load->view('users/success_view');
-			redirect('/books/search/');
+			redirect('/books/');
 		}
 		else{
 			$this->load->view('users/fail_view');

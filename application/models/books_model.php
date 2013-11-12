@@ -20,10 +20,14 @@ class Books_model extends CI_Model {
 		$query = $this->db->get('Books');
 	  }
 	else{
-	  $this->db->select('ISBN');
+	  $this->db->distinct();
+	  $this->db->select('Books.ISBN');
 	  $this->db->from('Books');
-	  $this->db->where('BNAME', $keyword);
-	  $this->db->or_where('ISBN', $keyword);
+	  $this->db->join('WroteBy','Books.ISBN=WroteBy.ISBN');
+	  $this->db->join('Authors','Authors.AID=WroteBy.AID');
+	  $this->db->like('lower(BNAME)', strtolower($keyword));
+	  $this->db->or_like('lower(Books.ISBN)', strtolower($keyword));
+	  $this->db->or_like('lower(ANAME)', strtolower($keyword));
 	  $query = $this->db->get();
 	}
 	  $x=0;
@@ -69,17 +73,18 @@ class Books_model extends CI_Model {
 		$this->db->from('Authors');
 		$this->db->where_in('AID',$AID);
 		$query = $this->db->get();
-		$authors = $query->result_array();
-		return $authors;
+		return $query->result_array();
 	}
 	
 	public function get_book_avgstar($isbn){  //get the average star and the number of reviews
 		$this->db->select_avg('STARS');
 		$this->db->from('Review_GeneratedFrom');
 		$this->db->where('ISBN',$isbn);
+		$this->db->where('VISIBILITY',1);
 		$query=$this->db->get();
 		$review = $query->row_array();
 		$this->db->select('RID');
+		$this->db->where('VISIBILITY',1);
 		$query = $this->db->get_where('Review_GeneratedFrom', array('ISBN'=>$isbn));
 		$review['COUNT'] = $query->num_rows();
 		return $review;
@@ -107,6 +112,17 @@ class Books_model extends CI_Model {
 		return $query->result_array();
 	}
 	
+	public function get_book_friend_notes($isbn){
+		$user_id=$this->session->userdata('user_id');
+		$friends_id='select USER_ID1 as USER_ID 
+			from FRIENDOF where USER_ID2 = '.$user_id.'
+			UNION
+			select USER_ID2 as USER_ID 
+			from FRIENDOF where USER_ID1 = '.$user_id;
+		$query = $this->db->query("select * from Note_Records, Users where Note_Records.USER_ID = Users.USER_ID and VISIBILITY=1 and ISBN='".$isbn."' and Note_Records.USER_ID in (".$friends_id.")");
+		return $query->result_array();
+	}
+	
 	public function get_book_tags($isbn){
 		$this->db->select('TNAME');
 		$query = $this->db->get_where('BelongsTo',array('ISBN'=>$isbn));
@@ -120,6 +136,7 @@ class Books_model extends CI_Model {
 		$info = array_merge($info,$this->books_model->get_book_reader_num($isbn));
 		$info['TAGS'] = $this->books_model->get_book_tags($isbn);
 		$info['REVIEWS'] = $this->books_model->get_book_reviews($isbn);
+		$info['NOTES'] = $this->books_model->get_book_friend_notes($isbn);
 		return $info;
 	}
 }

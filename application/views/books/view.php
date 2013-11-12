@@ -40,3 +40,13 @@
 <p><?php echo $review['RDATE'] ?></p>
 <?php endforeach ?>
 </div>
+<?php if (!empty($books_item['NOTES'])): ?>
+<div>
+<h3>Notes From Friends</h3>
+<?php foreach ($books_item['NOTES'] as $note):?>
+<p><?php echo $note['UNAME'] ?>&nbsp;&nbsp; page <?php echo $note['PAGE'] ?></p>
+<p><?php echo $note['NCONTENT'] ?></p>
+<p><?php echo $note['NDATE'] ?></p>
+<?php endforeach ?>
+</div>
+<?php endif ?>
