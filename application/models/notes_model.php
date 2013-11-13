@@ -25,27 +25,34 @@ class Notes_model extends CI_Model {
 		insert into note_records (user_id, isbn, ncontent, page, ndate, visibility)
 		values ('.$this->session->userdata('user_id').', \''.$this->input->post('isbn').'\', 
 			\''.$this->input->post('content').'\', '.$this->input->post('page').',
-			to_date(\''.unix_to_human($now).'\',YYYY-MM-DD HH:MI AM), 1)
+			to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'), 1)
 	');
 
 	return $this->db->insert_id('nid');
   }
   
-  public function get_note($rid){
+  public function get_note($nid){
 	$query = $this->db->query('
 		select N.*, B.bname, U.uname
 		from note_records N, books B, users U
-		where N.nid = '.$rid.' and N.isbn = B.isbn and N.user_id = U.user_id
+		where N.nid = '.$nid.' and N.isbn = B.isbn and N.user_id = U.user_id
 	');
 	return $query->row_array();
   }
   
-  public function set_read(){
+  public function update_note(){
 	$data = array(
-		'USER_ID' => $this->session->userdata('user_id'),
-		'ISBN' => $this->input->post('isbn'),
+		'PAGE' => $this->input->post('page'),
+		'NCONTENT' => $this->input->post('content')
 	);
-	$this->db->insert('Read',$data);
+	$this->db->where('nid',$this->input->post('nid'));
+	$this->db->update('note_records',$data);
+	
   }
+  
+  public function delete_review($nid){
+	$this->db->delete('note_records',array('NID'=>$nid));
+  }
+ 
   
 }
