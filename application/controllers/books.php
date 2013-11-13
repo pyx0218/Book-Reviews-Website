@@ -12,16 +12,12 @@ class Books extends CI_Controller {
     $this->load->helper('form');
     $this->load->library('form_validation');
 	
-	if($this->session->userdata('logged_in')){
 		$data['title'] = 'Home';
 		$data['user_name'] = $this->session->userdata('user_name');
-		$this->load->view('books/header', $data);  
+		$this->load->view('books/header', $data);
+		$this->load->view('templates/navigation_view');
 		$this->load->view('books/index');
 		$this->load->view('templates/footer');
-	}
-	else{
-		redirect('users/login');
-	}
    
   }
   

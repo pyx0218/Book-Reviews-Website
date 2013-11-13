@@ -8,8 +8,10 @@ class Reviews_model extends CI_Model {
   }
   
   public function add_review(){
-  $now=time();
-  //echo standard_date($now,'DATE_RFC822');
+  echo $now;
+	$this->load->helper('date');
+	$now=time();
+	echo $now;
 	$data = array(
 		'ISBN' => $this->input->post('isbn'),
 		'USER_ID' => $this->session->userdata('user_id')
@@ -26,7 +28,7 @@ class Reviews_model extends CI_Model {
 		'STARS' => $this->input->post('rating'),
 		'RCONTENT' => $this->input->post('content'),
 		'VISIBILITY' => 1
-		//'RDATE' => unix_to_human(time())
+		'RDATE' => unix_to_human($now)
 	);
 	$this->db->insert('REVIEW_GENERATEDFROM',$data);
 

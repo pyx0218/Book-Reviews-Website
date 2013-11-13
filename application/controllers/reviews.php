@@ -46,8 +46,8 @@ class Reviews extends CI_Controller {
 			$this->load->view('templates/footer');
 		}
 		else{
+		echo '************';
 			$rid = $this->reviews_model->add_review();
-			echo $rid;
 			redirect('reviews/view/'.$rid);
 		}
 	}
