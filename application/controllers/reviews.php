@@ -16,11 +16,10 @@ class Reviews extends CI_Controller {
 	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
 	
 	if($this->session->userdata('logged_in')){
-		$data['title'] = 'Write a Review';
-		$data['books_item'] = $this->books_model->get_book($isbn);
-		$data['user_name'] = $this->session->userdata('user_name');
-		$this->load->view('books/header', $data);  
-		$this->load->view('reviews/create', $data);
+		$books_item = $this->books_model->get_book($isbn);
+		$this->load->view('templates/navigation_view');
+		$this->load->view('books/header', array('title'=>'Write a Review'));  
+		$this->load->view('reviews/create', $books_item);
 		$this->load->view('templates/footer');
 	}
 	else{
@@ -37,16 +36,14 @@ class Reviews extends CI_Controller {
 
 	if($this->session->userdata('logged_in')){
 		$isbn = $this->input->post('isbn');
-		$data['books_item'] = $this->books_model->get_book(strip_quotes($isbn));
-		$data['user_name'] = $this->session->userdata('user_name');
+		$books_item = $this->books_model->get_book(strip_quotes($isbn));
 		if($this->form_validation->run()===FALSE){
-			$data['title'] = 'Write a Review';
-			$this->load->view('books/header', $data);  
-			$this->load->view('reviews/create', $data);
+			$this->load->view('templates/navigation_view');
+			$this->load->view('books/header', array('title'=>'Write a Review'));  
+			$this->load->view('reviews/create', $books_item);
 			$this->load->view('templates/footer');
 		}
 		else{
-		echo '************';
 			$rid = $this->reviews_model->add_review();
 			redirect('reviews/view/'.$rid);
 		}
@@ -67,10 +64,31 @@ class Reviews extends CI_Controller {
 	  $data['title'] = $review_item['RTITLE'].' (Review: '.$review_item['BNAME'].')';
 	  $data['user_name'] = $this->session->userdata('user_name');
 
+	  $this->load->view('templates/navigation_view');
 	  $this->load->view('books/header', $data);
 	  $this->load->view('reviews/view', $review_item);
-	  $this->load->view('templates/footer');
-    
+	  $this->load->view('templates/footer'); 
+  }
+  
+  public function edit($rid){
+    $this->load->helper('form');
+	$this->load->library('form_validation');
+    $this->form_validation->set_rules('title', 'Title', 'trim|required|max_length[100]');
+    $this->form_validation->set_rules('rating', 'Rating', 'required');
+	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
+	
+	if($this->session->userdata('logged_in')){
+		$data['title'] = 'Edit a Review';
+		$data['books_item'] = $this->books_model->get_book($isbn);
+		$data['user_name'] = $this->session->userdata('user_name');
+		$this->load->view('templates/navigation_view');
+		$this->load->view('books/header', $data);  
+		$this->load->view('reviews/edit', $data);
+		$this->load->view('templates/footer');
+	}
+	else{
+		redirect('users/login');
+	}
   }
   
 }

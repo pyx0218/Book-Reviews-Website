@@ -14,8 +14,8 @@ class Books extends CI_Controller {
 	
 		$data['title'] = 'Home';
 		$data['user_name'] = $this->session->userdata('user_name');
-		$this->load->view('books/header', $data);
 		$this->load->view('templates/navigation_view');
+		$this->load->view('books/header', $data);
 		$this->load->view('books/index');
 		$this->load->view('templates/footer');
    
@@ -37,7 +37,8 @@ class Books extends CI_Controller {
 		$data['title'] = 'Search:'.$keyword;
 		$data['books'] = $this->books_model->search_books($keyword);
 	}
-	$this->load->view('books/header', $data);  
+	$this->load->view('templates/navigation_view');	
+	$this->load->view('books/header', $data);
     $this->load->view('books/search', $data);
 	$this->load->view('books/result', $data);
 	$this->load->view('templates/footer');
@@ -53,7 +54,8 @@ class Books extends CI_Controller {
 		show_404();
 
 	  $data['title'] = $data['books_item']['BNAME'];
-
+	
+	  $this->load->view('templates/navigation_view');
 	  $this->load->view('books/header', $data);
 	  $this->load->view('books/view', $data);
 	  $this->load->view('templates/footer');

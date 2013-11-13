@@ -8,10 +8,9 @@ class Reviews_model extends CI_Model {
   }
   
   public function add_review(){
-  echo $now;
 	$this->load->helper('date');
 	$now=time();
-	echo $now;
+
 	$data = array(
 		'ISBN' => $this->input->post('isbn'),
 		'USER_ID' => $this->session->userdata('user_id')
@@ -21,16 +20,18 @@ class Reviews_model extends CI_Model {
 	if(empty($temp)){
 		$this->db->insert('READ',$data);
 	}
-	$data = array(
+	$sql = "insert into REVIEW_GENERATEDFROM (USER_ID, ISBN, RTITLE, STARS, RCONTENT, VISIBILITY, RDATE) values ('".$this->session->userdata('user_id')."','".$this->input->post('isbn')."','".$this->input->post('title')."','".$this->input->post('rating')."','".$this->input->post('content')."','1',to_date('".unix_to_human($now)."','YYYY-MM-DD HH:MI AM'))";
+	
+	/*$data = array(
 		'USER_ID' => $this->session->userdata('user_id'),
 		'ISBN' => $this->input->post('isbn'),
 		'RTITLE' => $this->input->post('title'),
 		'STARS' => $this->input->post('rating'),
 		'RCONTENT' => $this->input->post('content'),
-		'VISIBILITY' => 1
-		'RDATE' => unix_to_human($now)
-	);
-	$this->db->insert('REVIEW_GENERATEDFROM',$data);
+		'VISIBILITY' => 1,
+		'RDATE' => $date
+	);*/
+	$this->db->query($sql);
 
 	return $this->db->insert_id('rid');
   }
@@ -49,7 +50,7 @@ class Reviews_model extends CI_Model {
   public function set_read(){
 	$data = array(
 		'USER_ID' => $this->session->userdata('user_id'),
-		'ISBN' => strip_quotes($this->input->post('isbn')),
+		'ISBN' => $this->input->post('isbn'),
 	);
 	$this->db->insert('Read',$data);
   }
