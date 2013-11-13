@@ -25,9 +25,11 @@ class Books_model extends CI_Model {
 	  $this->db->from('Books');
 	  $this->db->join('WroteBy','Books.ISBN=WroteBy.ISBN');
 	  $this->db->join('Authors','Authors.AID=WroteBy.AID');
+	  $this->db->join('BelongsTo','BelongsTo.ISBN=Books.ISBN');
 	  $this->db->like('lower(BNAME)', strtolower($keyword));
 	  $this->db->or_like('lower(Books.ISBN)', strtolower($keyword));
 	  $this->db->or_like('lower(ANAME)', strtolower($keyword));
+	  $this->db->or_like('lower(TNAME)',strtolower($keyword));
 	  $query = $this->db->get();
 	}
 	  $x=0;
@@ -186,7 +188,11 @@ class Books_model extends CI_Model {
 			'USER_ID' => $this->session->userdata('user_id'),
 			'ISBN' => $this->input->post('isbn'),
 		);
-		$this->db->insert('WantsToRead',$data);
+		$query=$this->db->get_where('WANTSTOREAD',$data);
+		$temp=$query->result_array();
+		if(empty($temp)){
+			$this->db->insert('WantsToRead',$data);
+		}
 	}
 	
 	public function set_reading(){
@@ -194,7 +200,11 @@ class Books_model extends CI_Model {
 			'USER_ID' => $this->session->userdata('user_id'),
 			'ISBN' => $this->input->post('isbn'),
 		);
-		$this->db->insert('Reading',$data);
+		$query=$this->db->get_where('READING',$data);
+		$temp=$query->result_array();
+		if(empty($temp)){
+			$this->db->insert('Reading',$data);
+		}
 	}
 	
 	public function set_read(){
@@ -202,6 +212,10 @@ class Books_model extends CI_Model {
 			'USER_ID' => $this->session->userdata('user_id'),
 			'ISBN' => $this->input->post('isbn'),
 		);
-		$this->db->insert('Read',$data);
+		$query=$this->db->get_where('READ',$data);
+		$temp=$query->result_array();
+		if(empty($temp)){
+			$this->db->insert('Read',$data);
+		}
 	}
 }
