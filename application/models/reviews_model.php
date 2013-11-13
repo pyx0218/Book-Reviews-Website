@@ -36,6 +36,17 @@ class Reviews_model extends CI_Model {
 	return $this->db->insert_id('rid');
   }
   
+  public function update_review(){
+	$data = array(
+		'RTITLE' => $this->input->post('title'),
+		'STARS' => $this->input->post('rating'),
+		'RCONTENT' => $this->input->post('content')
+	);
+	$this->db->where('RID',$this->input->post('rid'));
+	$this->db->update('REVIEW_GENERATEDFROM',$data);
+	
+  }
+  
   public function get_review($rid){
 	$this->db->select('RID,RTITLE,RDATE,STARS,RCONTENT,Review_GeneratedFrom.ISBN as ISBN,BNAME,Review_GeneratedFrom.USER_ID as USER_ID,UNAME');
 	$this->db->from('Review_GeneratedFrom');
@@ -45,6 +56,10 @@ class Reviews_model extends CI_Model {
 	$this->db->where('VISIBILITY',1);
 	$query = $this->db->get();
 	return $query->row_array();
+  }
+  
+  public function delete_review($rid){
+	$this->db->delete('Review_GeneratedFrom',array('RID'=>$rid));
   }
   
   public function set_read(){

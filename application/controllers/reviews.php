@@ -78,17 +78,57 @@ class Reviews extends CI_Controller {
 	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
 	
 	if($this->session->userdata('logged_in')){
-		$data['title'] = 'Edit a Review';
-		$data['books_item'] = $this->books_model->get_book($isbn);
-		$data['user_name'] = $this->session->userdata('user_name');
+		$review_item = $this->reviews_model->get_review($rid);
 		$this->load->view('templates/navigation_view');
-		$this->load->view('books/header', $data);  
-		$this->load->view('reviews/edit', $data);
+		$this->load->view('books/header', array('title','Edit a Review'));  
+		$this->load->view('reviews/edit', $review_item);
 		$this->load->view('templates/footer');
 	}
 	else{
 		redirect('users/login');
 	}
+  }
+  
+  public function update(){
+	$this->load->helper('form');
+	$this->load->library('form_validation');
+    $this->form_validation->set_rules('title', 'Title', 'trim|required|max_length[100]');
+    $this->form_validation->set_rules('rating', 'Rating', 'required');
+	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
+
+	if($this->session->userdata('logged_in')){
+		$rid = $this->input->post('rid');
+		echo $this->input->post('submit');
+		if($this->input->post('submit')=='Save'){
+			$review_item = $this->reviews_model->get_review(strip_quotes($rid));
+			if($this->form_validation->run()===FALSE){
+				$this->load->view('templates/navigation_view');
+				$this->load->view('books/header', array('title'=>'Edit a Review'));  
+				$this->load->view('reviews/edit', $review_item);
+				$this->load->view('templates/footer');
+			}
+			else{
+				$this->reviews_model->update_review();
+				redirect('reviews/view/'.$rid);
+			}
+		}
+		elseif($this->input->post('cancel')=='Cancel') {
+			redirect('reviews/view/'.$rid);
+		}
+	}
+	else{
+		redirect('users/login');
+	}
+  }
+  
+  public function delete($rid){
+	  if($this->session->userdata('logged_in')){
+		$this->reviews_model->delete_review($rid);
+		redirect('users/view/'.$this->session->userdata('user_id'));
+	  }
+	  else{
+		redirect('users/login');
+	  }
   }
   
 }
