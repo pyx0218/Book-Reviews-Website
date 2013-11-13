@@ -6,7 +6,7 @@
 		echo' (Administrator)';
 	}
 ?></h2>
-<?php if($this->session->userdata('user_id') != $user['user_id'] && $isfriend == false){
+<?php if($this->session->userdata('user_id') != $user['user_id'] && $user['isfriend'] == false){
 	echo '<a href = "/index.php/users/add_friend/'.$user['user_id'].'">Become Friend!</a>';
 	}?>
 
@@ -40,7 +40,7 @@
  ?>
 
 <div id="main">
-	<h3>My friends:</h3>
+	<h3><?php if($user['is_self']) echo'My '; else echo'His/her ' ?>friends:</h3>
 	<p>
 	<?php foreach ($friends as $fname){
 		echo '<a href="/index.php/users/view/'.$fname['user_id'].'">'.$fname['name'].'</a>&nbsp;&nbsp;';
@@ -53,25 +53,41 @@
 	</p>
 </div>
 <div>
-	<h3>Books I'm reading now:</h3>
+	<h3>Books <?php if($user['is_self']) echo'I\'m '; else echo'he/she is ' ?>reading now:</h3>
 	<p>
-	<?php foreach ($reading as $book){
-		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
+	<?php
+		foreach ($reading as $book){
+		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a>&nbsp;&nbsp;';
+		if($user['is_self'] || $user['isfriend']){
+			foreach ($notes as $note){
+				if($book['isbn'] == $note['isbn']){
+					echo '<a href="/index.php/notes/view/'.$note['nid'].'">note: page '.$note['page'].'</a>&nbsp;&nbsp;';
+				}
+			}
+		}
+		
+		echo '<br>';
 	}
 	?>
 	</p>
 </div>
 <div>
-	<h3>Books I have already read:</h3>
+	<h3>Books <?php if($user['is_self']) echo'I have '; else echo'he/she has ' ?>already read:</h3>
 	<p>
 	<?php foreach ($read as $book){
-		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
+		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a>&nbsp;&nbsp;';
+		foreach ($reviews as $review){
+			if($book['isbn'] == $review['isbn']){
+				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">review: '.$review['rtitle'].'</a>&nbsp;&nbsp;';
+			}
+		}
+		echo '<br>';
 	}
 	?>
 	</p>
 </div>
 <div>
-	<h3>Books I want to read:</h3>
+	<h3>Books <?php if($user['is_self']) echo'I want '; else echo'he/she wants ' ?>to read:</h3>
 	<p>
 	<?php foreach ($wantstoread as $book){
 		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';

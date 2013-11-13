@@ -83,7 +83,7 @@ class Users_model extends CI_Model {
 		}
 		$idx = 0;
 		$friends = array();
-		$isfriend = FALSE;
+		$user['isfriend'] = FALSE;
 		$query = $this->db->query('select distinct U.UNAME, U.USER_ID
 			from USERS U, FRIENDOF F
 			WHERE F.USER_ID1 = '.$user_id.' AND F.USER_ID2 = U.USER_ID
@@ -98,7 +98,7 @@ class Users_model extends CI_Model {
 			);
 			
 			if($row->USER_ID == $this->session->userdata('user_id')){
-				$isfriend = TRUE;
+				$user['isfriend'] = TRUE;
 			}
 		}
 		$idx = 0;
@@ -123,6 +123,7 @@ class Users_model extends CI_Model {
 				'isbn' => $row->ISBN,
 			);
 		}
+		//////
 		$idx = 0;
 		$wantstoread = array();
 		$query = $this->db->query('select distinct B.bname, B.isbn
@@ -134,13 +135,47 @@ class Users_model extends CI_Model {
 				'isbn' => $row->ISBN,
 			);
 		}
+		////////
+		$idx = 0;
+		$reviews = array();
+		$query = $this->db->query('
+			select *
+			from review_generatedfrom R
+			where R.user_id = '.$user_id.'
+		');
+		foreach ($query->result() as $row){
+			$reviews[$idx++] = array(
+				'rid' => $row->RID,
+				'rtitle' => $row->RTITLE,
+				'isbn' => $row->ISBN,
+			);
+		}
+		
+		////////
+		$idx = 0;
+		$notes = array();
+		$query = $this->db->query('
+			select *
+			from note_records N
+			where N.user_id = '.$user_id.'
+		');
+		foreach ($query->result() as $row){
+			$notes[$idx++] = array(
+				'nid' => $row->NID,
+				'page' => $row->PAGE,
+				'isbn' => $row->ISBN,
+			);
+		}
+		
+		////////
 		$data = array(
 			'user' => $user,
 			'friends' => $friends,
 			'reading' => $reading,
 			'read' => $read,
 			'wantstoread' => $wantstoread,
-			'isfriend' => $isfriend,);
+			'notes' => $notes,
+			'reviews' => $reviews,);
 		
 		if($this->session->userdata('admin') && $user['user_id'] == $this->session->userdata['user_id']){
 			$idx = 0;
