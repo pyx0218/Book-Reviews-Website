@@ -68,7 +68,7 @@ class Users extends CI_Controller {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function view($user_id =0){
 		$data = $this->users_model->user_info($user_id);
-		$this->load->view('users/navigation_view');
+		$this->load->view('templates/navigation_view');
 		$this->load->view('users/personal_page_view', $data);
 		
 		$this->load->view('templates/footer');
