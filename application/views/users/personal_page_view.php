@@ -77,7 +77,7 @@
 	<?php foreach ($read as $book){
 		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a>&nbsp;&nbsp;';
 		foreach ($reviews as $review){
-			if($book['isbn'] == $review['isbn']){
+			if($book['isbn'] == $review['isbn'] && $review['visibility'] == 1){
 				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">review: '.$review['rtitle'].'</a>&nbsp;&nbsp;';
 			}
 		}

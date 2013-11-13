@@ -148,6 +148,7 @@ class Users_model extends CI_Model {
 				'rid' => $row->RID,
 				'rtitle' => $row->RTITLE,
 				'isbn' => $row->ISBN,
+				'visibility' => $row->VISIBILITY,
 			);
 		}
 		
@@ -164,6 +165,7 @@ class Users_model extends CI_Model {
 				'nid' => $row->NID,
 				'page' => $row->PAGE,
 				'isbn' => $row->ISBN,
+				'visibility' => $row->VISIBILITY,
 			);
 		}
 		

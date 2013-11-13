@@ -48,18 +48,31 @@ class Reviews_model extends CI_Model {
   }
   
   public function get_review($rid){
-	$this->db->select('RID,RTITLE,RDATE,STARS,RCONTENT,Review_GeneratedFrom.ISBN as ISBN,BNAME,Review_GeneratedFrom.USER_ID as USER_ID,UNAME');
-	$this->db->from('Review_GeneratedFrom');
-	$this->db->join('Books','Books.ISBN=Review_GeneratedFrom.ISBN');
-	$this->db->join('Users','Users.USER_ID=Review_GeneratedFrom.USER_ID');
-	$this->db->where('RID',$rid);
-	$this->db->where('VISIBILITY',1);
-	$query = $this->db->get();
+	$query = $this->db->query('
+		select R.*, U.uname, B.bname
+		from review_generatedfrom R, users U, books B
+		where R.user_id = U.user_id and R.isbn = B.isbn and R.rid = '.$rid.' and R.visibility = 1
+	');
 	return $query->row_array();
   }
   
   public function delete_review($rid){
 	$this->db->delete('Review_GeneratedFrom',array('RID'=>$rid));
+  }
+  
+  public function shield_review($data){
+	$query = $this->db->query('
+		update review_generatedfrom
+		set visibility = 0
+		where rid = '.$data['review_item']['RID'].'
+	');
+	$this->load->helper('date');
+	$now=time();
+	$query = $this->db->query('
+		insert into monitors (aid, mdate, rid, operation, reason)
+		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
+			'.$data['review_item']['RID'].', 0, \''.$this->input->post('content').'\')
+	');
   }
   
   
