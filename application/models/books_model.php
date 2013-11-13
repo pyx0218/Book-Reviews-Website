@@ -93,12 +93,35 @@ class Books_model extends CI_Model {
 	//get the number of users who want to/is reading/read the book
 	public function get_book_reader_num($isbn){
 		$query = $this->db->get_where('WantsToRead', array('ISBN' => $isbn));
-		$reader['WANTSTOREAD'] = $query->num_rows();
+		$reader['WANTSTOREAD_NUM'] = $query->num_rows();
 		$query = $this->db->get_where('Reading', array('ISBN' => $isbn));
-		$reader['READING'] = $query->num_rows();
+		$reader['READING_NUM'] = $query->num_rows();
 		$query = $this->db->get_where('Read', array('ISBN' => $isbn));
-		$reader['READ'] = $query->num_rows();
+		$reader['READ_NUM'] = $query->num_rows();
 		return $reader;
+	}
+	
+	//Find whether the current user wants to/is reading/read the book
+	public function get_book_reader_flag($isbn){
+		$flag['WANTSTOREAD_FLAG']=FALSE;
+		$flag['READING_FLAG']=FALSE;
+		$flag['READ_FLAG']=FALSE;
+		if($this->session->userdata('logged_in')){
+			$user_id=$this->session->userdata('user_id');
+			$query = $this->db->get_where('WantsToRead', array('ISBN' => $isbn, 'USER_ID'=>$user_id));
+			$result = $query->result_array();
+			if(!empty($result))
+				$flag['WANTSTOREAD_FLAG']=TRUE;
+			$query = $this->db->get_where('Reading', array('ISBN' => $isbn, 'USER_ID'=>$user_id));
+			$result = $query->result_array();
+			if(!empty($result))
+				$flag['READING_FLAG']=TRUE;
+			$query = $this->db->get_where('Read', array('ISBN' => $isbn, 'USER_ID'=>$user_id));
+			$result = $query->result_array();
+			if(!empty($result))
+				$flag['READ_FLAG']=TRUE;
+		}
+		return $flag;
 	}
 	
 	public function get_book_reviews($isbn){
@@ -154,6 +177,31 @@ class Books_model extends CI_Model {
 		$info['REVIEWS'] = $this->books_model->get_book_reviews($isbn);
 		$info['NOTES'] = $this->books_model->get_book_friend_notes($isbn);
 		$info['RECOMBOOKS'] = $this->books_model->get_book_like_also_like($isbn);
+		$info = array_merge($info, $this->books_model->get_book_reader_flag($isbn));
 		return $info;
+	}
+	
+	public function set_wanttoread(){
+		$data = array(
+			'USER_ID' => $this->session->userdata('user_id'),
+			'ISBN' => $this->input->post('isbn'),
+		);
+		$this->db->insert('WantsToRead',$data);
+	}
+	
+	public function set_reading(){
+		$data = array(
+			'USER_ID' => $this->session->userdata('user_id'),
+			'ISBN' => $this->input->post('isbn'),
+		);
+		$this->db->insert('Reading',$data);
+	}
+	
+	public function set_read(){
+		$data = array(
+			'USER_ID' => $this->session->userdata('user_id'),
+			'ISBN' => $this->input->post('isbn'),
+		);
+		$this->db->insert('Read',$data);
 	}
 }

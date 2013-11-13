@@ -12,7 +12,7 @@
 		</p>
         <p><?php echo $books_item['PUBLISHER'] ?></p>
 		<p><?php echo $books_item['STARS']?> stars (<?php echo $books_item['COUNT']?>)</p>
-		<p>Want to read (<?php echo $books_item['WANTSTOREAD']?>)&nbsp;&nbsp; Reading (<?php echo $books_item['READING']?>)&nbsp;&nbsp; Read (<?php echo $books_item['READ']?>)</p>
+		<p>Want to read (<?php echo $books_item['WANTSTOREAD_NUM']?>)&nbsp;&nbsp; Reading (<?php echo $books_item['READING_NUM']?>)&nbsp;&nbsp; Read (<?php echo $books_item['READ_NUM']?>)</p>
 		<img src="<?php echo $books_item['COVER_URL'] ?>">
     </div>
 

@@ -47,6 +47,7 @@ class Books extends CI_Controller {
 
   public function view($isbn)
   {
+	  $this->load->helper('form');
 	  $data['user_name'] = $this->session->userdata('user_name');
 	  $data['books_item'] = $this->books_model->get_book_information($isbn);
 	
@@ -60,6 +61,29 @@ class Books extends CI_Controller {
 	  $this->load->view('books/view', $data);
 	  $this->load->view('templates/footer');
     
+  }
+  
+  public function add_reader(){
+	$this->load->helper('form');
+	if($this->session->userdata('logged_in')){
+		$isbn=$this->input->post('isbn');
+		echo $this->input->post('wanttoread');
+		echo $this->input->post('reading');
+		echo $this->input->post('read');
+		if($this->input->post('wanttoread') != FALSE){
+			$this->books_model->set_wanttoread();
+		}
+		elseif($this->input->post('reading')!= FALSE){
+			$this->books_model->set_reading();
+		}
+		elseif($this->input->post('read')!= FALSE){
+			$this->books_model->set_read();
+		}
+		redirect('books/view/'.$isbn);
+	}
+	else{
+		redirect('users/login');
+	}
   }
   
   

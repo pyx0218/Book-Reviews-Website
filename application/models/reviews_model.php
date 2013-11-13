@@ -62,12 +62,5 @@ class Reviews_model extends CI_Model {
 	$this->db->delete('Review_GeneratedFrom',array('RID'=>$rid));
   }
   
-  public function set_read(){
-	$data = array(
-		'USER_ID' => $this->session->userdata('user_id'),
-		'ISBN' => $this->input->post('isbn'),
-	);
-	$this->db->insert('Read',$data);
-  }
   
 }

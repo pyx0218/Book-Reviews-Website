@@ -8,12 +8,34 @@
         <p><?php echo $books_item['PUBLISHER'] ?></p>
 		<p><?php echo $books_item['ISBN'] ?></p>
 		<p><?php echo $books_item['STARS']?> stars (<?php echo $books_item['COUNT']?>)</p>
-		<p>Want to read (<?php echo $books_item['WANTSTOREAD']?>)&nbsp;&nbsp; Reading (<?php echo $books_item['READING']?>)&nbsp;&nbsp; Read (<?php echo $books_item['READ']?>)</p>
-		<img src="<?php echo $books_item['COVER_URL'] ?>">
+
+		<?php echo form_open('books/add_reader','',array('isbn'=>$books_item['ISBN'])); ?>
+		<?php if($books_item['WANTSTOREAD_FLAG']): ?>
+		<label>I want to read it</label> 
+		<?php else: ?>
+		<input type="submit" name="wanttoread" value="Want to read" /> 
+		<?php endif ?>
+		(<?php echo $books_item['WANTSTOREAD_NUM']?>)&nbsp;&nbsp; 
+		<?php if($books_item['READING_FLAG']): ?>
+		<label>I am reading it</label> 
+		<?php else: ?>
+		<input type="submit" name="reading" value="Reading" />
+		<?php endif ?>
+		(<?php echo $books_item['READING_NUM']?>)&nbsp;&nbsp; 
+		<?php if($books_item['READ_FLAG']): ?>
+		<label>I have read it</label> 
+		<?php else: ?>
+		<input type="submit" name="read" value="Read" />
+		<?php endif ?>
+		(<?php echo $books_item['READ_NUM']?>)
+		</form>	
 </div>
 <div>
 <a href="<?php echo site_url('reviews/new_review/'.$books_item['ISBN']) ?>">Write a Review</a>&nbsp;&nbsp;
 <a href="<?php echo site_url('notes/new_note/'.$books_item['ISBN']) ?>">Write a Note</a>
+</div>
+<div>
+<img src="<?php echo $books_item['COVER_URL'] ?>">
 </div>
 <div>
 <h3>Description</h3>
@@ -38,7 +60,7 @@
 <h3>Reviews</h3>
 <?php foreach ($books_item['REVIEWS'] as $review):?>
 <h4><?php echo $review['RTITLE'] ?></h4>
-<p><?php echo $review['UNAME'] ?>&nbsp;&nbsp;<?php echo $review['STARS'] ?> stars</p>
+<p><a href="<?php echo site_url('users/view/'.$review['USER_ID']) ?>"><?php echo $review['UNAME'] ?></a>&nbsp;&nbsp;<?php echo $review['STARS'] ?> stars</p>
 <div>
 <p><?php echo $review['RCONTENT'] ?></p>
 </div>
@@ -49,7 +71,7 @@
 <div>
 <h3>Notes From Friends</h3>
 <?php foreach ($books_item['NOTES'] as $note):?>
-<p><?php echo $note['UNAME'] ?>&nbsp;&nbsp; page <?php echo $note['PAGE'] ?></p>
+<p><a href="<?php echo site_url('users/view/'.$note['USER_ID']) ?>"><?php echo $note['UNAME'] ?></a>&nbsp;&nbsp; page <?php echo $note['PAGE'] ?></p>
 <p><?php echo $note['NCONTENT'] ?></p>
 <p><?php echo $note['NDATE'] ?></p>
 <?php endforeach ?>
