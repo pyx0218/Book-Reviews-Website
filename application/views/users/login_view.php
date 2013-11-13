@@ -8,8 +8,8 @@
   <input type="input" name="username" value="<?php echo set_value('username'); ?>" /><br />
 
   <label for="text">Password:</label>
-  <input type="password" name="password" value="<?php echo set_value('password'); ?>"><br />
+  <input type="password" name="password" ><br />
   
   <input type="submit" name="submit"/> 
-
 </form>
+<a href = "/index.php/users/registration">Press here for registration!</a><br>

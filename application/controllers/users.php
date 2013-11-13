@@ -6,7 +6,7 @@ class Users extends CI_Controller {
     parent::__construct();
     $this->load->model('users_model');
   }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
   public function login(){
   
 	$this->load->helper('form');
@@ -37,7 +37,7 @@ class Users extends CI_Controller {
 		}
 	}
   }
-  
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
   public function registration(){
 	$this->load->library('form_validation');
 	// field name, error message, validation rules
@@ -46,7 +46,12 @@ class Users extends CI_Controller {
 	$this->form_validation->set_rules('con_password', 'Password Confirmation', 'trim|required|matches[password]');
 
 	if($this->form_validation->run() == FALSE){
+		$data['title'] = 'Registration!';
+		$data['content'] = 'You can finish your registration here!';
+		$this->load->view('templates/header', $data);
+		$this->load->view('templates/body', $data);
 		$this->load->view('users/registration_view');
+		$this->load->view('templates/footer');
 	}
 	else{
 		$this->users_model->add_user();
@@ -60,14 +65,15 @@ class Users extends CI_Controller {
  }
   
   
-
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function view($user_id =0){
 		$data = $this->users_model->user_info($user_id);
+		$this->load->view('users/navigation_view');
 		$this->load->view('users/personal_page_view', $data);
 		
 		$this->load->view('templates/footer');
 	}
-	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function setting(){
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[32]');
@@ -81,7 +87,17 @@ class Users extends CI_Controller {
 		}
 	}
 	
-	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function logout(){
+		$newdata = array(
+		'user_id'   =>'',
+		'user_name'  =>'',
+		'logged_in' => FALSE,
+		);
+		$this->session->unset_userdata($newdata );
+		$this->session->sess_destroy();
+		$this->login();
+	}
 	
 	
 	

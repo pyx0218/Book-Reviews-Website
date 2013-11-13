@@ -1,9 +1,13 @@
+
 <h2><?php 
 	echo $user['name'];
 	if($user['admin']){
 		echo' (Administrator)';
 	}
 ?></h2>
+<?php if($this->session->userdata('user_id') != $user['user_id'] && $isfriend = false){
+	echo '<p>'.form_open('users/user_info');
+	echo '<input type="submit" value="Become friend!" /></p></form>';}?>
 
 <?php
 	if($this->session->userdata('admin') && $user['user_id'] == $this->session->userdata['user_id']){

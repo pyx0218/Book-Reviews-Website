@@ -1,11 +1,3 @@
-<div id="content">
-<div class="signup_wrap">
-<div class="signin_form">
-</div><!--<div class="signin_form">-->
-</div><!--<div class="signup_wrap">-->
-<div class="reg_form">
-<div class="form_title">Sign Up</div>
-<div class="form_sub_title">Join us and you will find more interests in reading!</div>
  <?php echo validation_errors('<p class="error">'); ?>
  <?php echo form_open("users/registration"); ?>
   <p>
@@ -24,5 +16,4 @@
   <input type="submit" class="greenButton" value="Submit" />
   </p>
  <?php echo form_close(); ?>
-</div><!--<div class="reg_form">-->
-</div><!--<div id="content">-->
+ <a href = "/index.php/users/login/">Return back to Login!</a><br>
