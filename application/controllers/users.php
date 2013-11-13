@@ -56,7 +56,7 @@ class Users extends CI_Controller {
 	else{
 		$this->users_model->add_user();
 		$data['title'] = 'Succeed!';
-		$data['content'] = 'Congradulations! I have successfully finished registration!';
+		$data['content'] = 'Congradulations! You have successfully finished registration!';
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/body', $data);
 		$this->load->view('users/login_view');
@@ -79,11 +79,17 @@ class Users extends CI_Controller {
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[32]');
 		$this->form_validation->set_rules('con_password', 'Password Confirmation', 'trim|required|matches[password]');
 		if($this->form_validation->run() == FALSE){
-			$this->load->view('users/setting_view');
+			$data = $this->session->all_userdata();
+			$this->load->view('users/setting_view', $data);
 		}
 		else{
 			$this->users_model->setting();
-			$this->load->view('users/change_password_succeed');
+			$data['title'] = 'Succeed!';
+			$data['content'] = 'Congradulations! You have successfully changed your password!';
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/body', $data);
+			$this->load->view('users/login_view');
+			$this->load->view('templates/footer');
 		}
 	}
 	

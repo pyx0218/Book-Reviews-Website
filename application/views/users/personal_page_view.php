@@ -6,12 +6,12 @@
 		echo' (Administrator)';
 	}
 ?></h2>
-<?php if($this->session->userdata('user_id') != $user['user_id'] && $user['isfriend'] == false){
+<?php if($user['is_self'] == false && $user['isfriend'] == false){
 	echo '<a href = "/index.php/users/add_friend/'.$user['user_id'].'">Become Friend!</a>';
 	}?>
 
 <?php
-	if($this->session->userdata('admin') && $user['user_id'] == $this->session->userdata['user_id']){
+	if($user['admin'] && $user['is_self']){
 		echo '<div>
 			<h3>My monitor operations:</h3>
 			<p><table border="1">

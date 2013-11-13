@@ -1,5 +1,5 @@
-<h2><?php echo $this->session->userdata('user_name');
-	if($this->session->userdata('admin')){
+<h2><?php echo $user_name;
+	if($admin){
 		echo' (Administrator)';
 	}
 ?></h2>
