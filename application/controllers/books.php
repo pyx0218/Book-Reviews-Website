@@ -20,10 +20,7 @@ class Books extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 	else{
-		$data['title'] = 'Log In';
-		$this->load->view('templates/header', $data);  
-		$this->load->view('users/login_view');
-		$this->load->view('templates/footer');
+		redirect('users/login');
 	}
    
   }
@@ -31,7 +28,9 @@ class Books extends CI_Controller {
   public function search()
   {
 	$this->load->helper('form');
-  
+    
+	$data['user_name'] = $this->session->userdata('user_name');
+	
 	$keyword = $this->input->post('keyword');
 	$data['keyword'] = $keyword;
 	if(!$keyword){
@@ -51,7 +50,6 @@ class Books extends CI_Controller {
 
   public function view($isbn)
   {
-   if($this->session->userdata('logged_in')){
 	  $data['user_name'] = $this->session->userdata('user_name');
 	  $data['books_item'] = $this->books_model->get_book_information($isbn);
 	
@@ -63,13 +61,6 @@ class Books extends CI_Controller {
 	  $this->load->view('books/header', $data);
 	  $this->load->view('books/view', $data);
 	  $this->load->view('templates/footer');
-	}
-	else{
-		$data['title'] = 'Log In';
-		$this->load->view('templates/header', $data);  
-		$this->load->view('users/login_view');
-		$this->load->view('templates/footer');
-	}
     
   }
   

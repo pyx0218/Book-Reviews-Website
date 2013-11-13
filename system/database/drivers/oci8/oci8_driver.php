@@ -434,10 +434,15 @@ class CI_DB_oci8_driver extends CI_DB {
 	 * @access  public
 	 * @return  integer
 	 */
-	public function insert_id()
+	public function insert_id($tbl='')
 	{
 		// not supported in oracle
-		return $this->display_error('db_unsupported_function');
+		//return $this->display_error('db_unsupported_function');
+		$sql = "select " . $tbl . "_seq.currval as id from dual";
+		$statement = @ociparse($this->conn_id, $sql);
+		$row=@ociexecute($statement);
+		@ocifetchinto($statement, $row, OCI_ASSOC);
+		return $row['ID'];
 	}
 
 	// --------------------------------------------------------------------

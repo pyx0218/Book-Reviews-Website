@@ -113,6 +113,9 @@ class Books_model extends CI_Model {
 	}
 	
 	public function get_book_friend_notes($isbn){
+		if(!$this->session->userdata('logged_in')){
+			return FALSE;
+		}
 		$user_id=$this->session->userdata('user_id');
 		$friends_id='select USER_ID1 as USER_ID 
 			from FRIENDOF where USER_ID2 = '.$user_id.'

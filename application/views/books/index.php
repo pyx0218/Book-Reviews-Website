@@ -1,5 +1,4 @@
-﻿<?php echo validation_errors() ?>
-<?php echo form_open('books/search') ?>
+﻿<?php echo form_open('books/search') ?>
 
   <label for="keyword">I want to read</label> 
   <input type="search" name="keyword" placeholder='Book name, author, ISBN, tag'/>
