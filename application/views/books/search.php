@@ -1,4 +1,3 @@
-<?php echo validation_errors() ?>
 <?php echo form_open('books/search') ?>
 
   <label for="keyword">I want to read</label> 

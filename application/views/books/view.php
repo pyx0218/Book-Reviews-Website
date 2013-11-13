@@ -12,8 +12,8 @@
 		<img src="<?php echo $books_item['COVER_URL'] ?>">
 </div>
 <div>
-<a href="<?php echo site_url('reviews/create') ?>">Write a Review</a>&nbsp;&nbsp;
-<a href="<?php echo site_url('notes/create') ?>">Write a Note</a>
+<a href="<?php echo site_url('reviews/new_review/'.$books_item['ISBN']) ?>">Write a Review</a>&nbsp;&nbsp;
+<a href="<?php echo site_url('notes/new_note/'.$books_item['ISBN']) ?>">Write a Note</a>
 </div>
 <div>
 <h3>Description</h3>
