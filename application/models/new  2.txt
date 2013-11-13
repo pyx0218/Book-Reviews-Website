@@ -1,0 +1,2 @@
+DELETE FROM friendof
+WHERE user_id1 = 1 and user_id2 = 2 or user_id1 = 2 and user_id2 = 1;

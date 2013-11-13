@@ -1,13 +1,14 @@
 
+
 <h2><?php 
 	echo $user['name'];
 	if($user['admin']){
 		echo' (Administrator)';
 	}
 ?></h2>
-<?php if($this->session->userdata('user_id') != $user['user_id'] && $isfriend = false){
-	echo '<p>'.form_open('users/user_info');
-	echo '<input type="submit" value="Become friend!" /></p></form>';}?>
+<?php if($this->session->userdata('user_id') != $user['user_id'] && $isfriend == false){
+	echo '<a href = "/index.php/users/add_friend/'.$user['user_id'].'">Become Friend!</a>';
+	}?>
 
 <?php
 	if($this->session->userdata('admin') && $user['user_id'] == $this->session->userdata['user_id']){
@@ -42,7 +43,12 @@
 	<h3>My friends:</h3>
 	<p>
 	<?php foreach ($friends as $fname){
-		echo '<a href="/index.php/users/view/'.$fname['user_id'].'">'.$fname['name'].'</a><br>';
+		echo '<a href="/index.php/users/view/'.$fname['user_id'].'">'.$fname['name'].'</a>&nbsp;&nbsp;';
+		if($user['is_self']){
+			echo '<a href="/index.php/users/unfriend/'.$fname['user_id'].'">unfriend</a>';
+		}
+		echo '<br>';
+		
 	}  ?>
 	</p>
 </div>

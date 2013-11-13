@@ -75,7 +75,12 @@ class Users_model extends CI_Model {
 		$row = $query->row();
 		
 		$user['name'] = $row->UNAME;
-		
+		if($this->session->userdata('user_id') == $user['user_id']){
+			$user['is_self'] = TRUE;
+		}
+		else{
+			$user['is_self'] = FALSE;
+		}
 		$idx = 0;
 		$friends = array();
 		$isfriend = FALSE;
@@ -91,7 +96,8 @@ class Users_model extends CI_Model {
 				'name' => $row->UNAME,
 				'user_id' => $row->USER_ID,
 			);
-			if($row->USER_ID == $user_id){
+			
+			if($row->USER_ID == $this->session->userdata('user_id')){
 				$isfriend = TRUE;
 			}
 		}
@@ -165,6 +171,24 @@ class Users_model extends CI_Model {
 			update USERS
 			set PWD = \''.$this->input->post('password').'\'
 			where USER_ID = '.$user_id.'
+		');
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	public function add_friend($friend_id){
+		$user_id = $this->session->userdata('user_id');
+		$this->db->query('
+			insert into friendof (user_id1, user_id2)
+			values ('.$user_id.','.$friend_id.')
+		');
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	public function unfriend($friend_id){
+		$user_id = $this->session->userdata('user_id');
+		$this->db->query('
+			delete from friendof
+			where user_id1 = '.$user_id.' and user_id2 = '.$friend_id.' or user_id1 = '.$friend_id.' and user_id2 = '.$user_id.'
 		');
 	}
 }
