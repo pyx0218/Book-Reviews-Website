@@ -58,7 +58,7 @@ class Reviews extends CI_Controller {
   {
 	  $review_item = $this->reviews_model->get_review($rid);
 	  
-	  if (empty($review_item))
+	  if (empty($review_item) or ($review_item['VISIBILITY']==0 and !$this->session->userdata('admin')))
 		show_404();
 	  $data = $this->session->all_userdata();
 	  $data['title'] = $review_item['RTITLE'].' (Review: '.$review_item['BNAME'].')';

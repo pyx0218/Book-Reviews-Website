@@ -52,6 +52,7 @@ class Books extends CI_Controller {
   {
 	  $this->load->helper('form');
 	  $data['user_name'] = $this->session->userdata('user_name');
+	  $data['admin'] = $this->session->userdata('admin');
 	  $data['books_item'] = $this->books_model->get_book_information($isbn);
 	
 	  if (empty($data['books_item']))

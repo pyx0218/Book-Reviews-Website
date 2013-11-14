@@ -59,12 +59,14 @@
 <div>
 <h3>Reviews</h3>
 <?php foreach ($books_item['REVIEWS'] as $review):?>
+<?php if($review['VISIBILITY']==1 or $admin): ?>
 <h4><a href="<?php echo site_url('reviews/view/'.$review['RID']) ?>"><?php echo $review['RTITLE'] ?></a></h4>
 <p><a href="<?php echo site_url('users/view/'.$review['USER_ID']) ?>"><?php echo $review['UNAME'] ?></a>&nbsp;&nbsp;<?php echo $review['STARS'] ?> stars</p>
 <div>
 <p><?php echo $review['RCONTENT'] ?></p>
 </div>
 <p><?php echo $review['RDATE'] ?></p>
+<?php endif ?>
 <?php endforeach ?>
 </div>
 <?php if (!empty($books_item['NOTES'])): ?>
