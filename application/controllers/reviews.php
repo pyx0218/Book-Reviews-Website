@@ -137,10 +137,7 @@ class Reviews extends CI_Controller {
   public function shield($rid){
 	$this->load->helper('form');
 	$this->load->library('form_validation');
-	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
-	
-	
-	
+	$this->form_validation->set_rules('content', 'Content', 'trim|required|max_length[500]');
 	if($this->form_validation->run()===FALSE){
 		$review_item = $this->reviews_model->get_review($rid);
 		$data = $this->session->all_userdata();
@@ -162,8 +159,33 @@ class Reviews extends CI_Controller {
 			redirect('reviews/view/'.$rid);
 		}
 	}
+  }
+  
+  public function restore($rid){
+	$this->load->helper('form');
+	$this->load->library('form_validation');
+	$this->form_validation->set_rules('content', 'Content', 'trim|required|max_length[500]');
+	if($this->form_validation->run()===FALSE){
+		$review_item = $this->reviews_model->get_review($rid);
+		$data = $this->session->all_userdata();
+		$data['review_item'] = $review_item;
+		$this->load->view('templates/navigation_view');
+		$this->load->view('reviews/restore_view', $data);
+		$this->load->view('templates/footer');
+	}
+	else{
+		if($this->input->post('submit')=='Submit'){
+			$review_item = $this->reviews_model->get_review($rid);
+			$data = $this->session->all_userdata();
+			$data['review_item'] = $review_item;
 			
-	
+			$this->reviews_model->restore_review($data);
+			redirect('books/view/'.$review_item['ISBN']);
+		}
+		else if($this->input->post('submit')=='Cancel'){
+			redirect('reviews/view/'.$rid);
+		}
+	}
   }
   
 }

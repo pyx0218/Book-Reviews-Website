@@ -51,7 +51,7 @@ class Reviews_model extends CI_Model {
 	$query = $this->db->query('
 		select R.*, U.uname, B.bname
 		from review_generatedfrom R, users U, books B
-		where R.user_id = U.user_id and R.isbn = B.isbn and R.rid = '.$rid.' and R.visibility = 1
+		where R.user_id = U.user_id and R.isbn = B.isbn and R.rid = '.$rid.'
 	');
 	return $query->row_array();
   }
@@ -72,6 +72,21 @@ class Reviews_model extends CI_Model {
 		insert into monitors (aid, mdate, rid, operation, reason)
 		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
 			'.$data['review_item']['RID'].', 0, \''.$this->input->post('content').'\')
+	');
+  }
+  
+  public function restore_review($data){
+	$query = $this->db->query('
+		update review_generatedfrom
+		set visibility = 1
+		where rid = '.$data['review_item']['RID'].'
+	');
+	$this->load->helper('date');
+	$now=time();
+	$query = $this->db->query('
+		insert into monitors (aid, mdate, rid, operation, reason)
+		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
+			'.$data['review_item']['RID'].', 1, \''.$this->input->post('content').'\')
 	');
   }
   

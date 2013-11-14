@@ -24,9 +24,9 @@
 		foreach ($monitors as $monitor){
 			echo '<tr>
 				<td>'.$monitor['date'].'</td>
-				<td>'.$monitor['title'].'</td>';
+				<td><a href = "/index.php/reviews/view/'.$monitor['rid'].'">'.$monitor['title'].'</a></td>';
 			if($monitor['operation'] == 0){
-				echo'<td>Delete</td>';
+				echo'<td>Shield</td>';
 			}
 			else{
 				echo'<td>Restore</td>';
@@ -77,7 +77,8 @@
 	<?php foreach ($read as $book){
 		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a>&nbsp;&nbsp;';
 		foreach ($reviews as $review){
-			if($book['isbn'] == $review['isbn'] && $review['visibility'] == 1){
+			if($book['isbn'] == $review['isbn']){
+				if($review['visibility'] == 1 || $user['admin'])
 				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">review: '.$review['rtitle'].'</a>&nbsp;&nbsp;';
 			}
 		}

@@ -183,7 +183,7 @@ class Users_model extends CI_Model {
 			$idx = 0;
 			$monitors = array();
 			$query = $this->db->query('
-				select R.rtitle, M.mdate, M.operation, M.reason
+				select R.rtitle, R.rid, M.mdate, M.operation, M.reason
 				from monitors M, Review_generatedfrom R
 				where M.aid = '.$user_id.' and M.rid = R.rid
 			');
@@ -193,6 +193,7 @@ class Users_model extends CI_Model {
 					'title' => $row->RTITLE,
 					'reason' => $row->REASON,
 					'operation' => $row->OPERATION,
+					'rid' => $row->RID,
 				);
 			}
 			$data['monitors'] = $monitors;
