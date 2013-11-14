@@ -1,3 +1,3 @@
-<strong>&copy; 2013</strong>  
+<strong>&copy; by Yanxi Pan and Dechuan Xu</strong>  
 </body>
 </html>

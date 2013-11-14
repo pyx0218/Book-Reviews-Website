@@ -187,6 +187,7 @@ class Users_model extends CI_Model {
 				from monitors M, Review_generatedfrom R
 				where M.aid = '.$user_id.' and M.rid = R.rid
 			');
+			//echo $query->num_rows();
 			foreach ($query->result() as $row){
 				$monitors[$idx++] = array(
 					'date' => $row->MDATE,
