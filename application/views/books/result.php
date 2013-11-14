@@ -17,7 +17,7 @@
 		<?php endforeach ?>
 		</p>
         <p><?php echo $books_item['PUBLISHER'] ?></p>
-		<p><?php echo $books_item['STARS']?> stars (<?php echo $books_item['COUNT']?>)</p>
+		<p><?php echo number_format($books_item['STARS'],1)?> stars (<?php echo $books_item['COUNT']?>)</p>
 		<p>Want to read (<?php echo $books_item['WANTSTOREAD_NUM']?>)&nbsp;&nbsp; Reading (<?php echo $books_item['READING_NUM']?>)&nbsp;&nbsp; Read (<?php echo $books_item['READ_NUM']?>)</p>
     </div>
   </div>

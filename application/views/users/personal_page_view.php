@@ -56,50 +56,67 @@
 <hr>
 <div class="row">
 	<h3>Books <?php if($user['is_self']) echo'I\'m '; else echo'he/she is ' ?>reading now:</h3>
-	<div class="row">
 	<?php
+		$x=0;
+		//echo '<div class="row">';
 		foreach ($reading as $book){
-		echo '<div class="span3">';
-		 echo '<img src="'.$book['cover_url'].'">';
-		 echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
-		 echo '<p class="text-center">';
-		if($user['is_self'] || $user['isfriend']){
-			foreach ($notes as $note){
-				if($book['isbn'] == $note['isbn']){
-					if($user['is_self'] || $user['isfriend'] || $note['visibility'] == 2)
-					echo '<a href="/index.php/notes/view/'.$note['nid'].'">Note: page '.$note['page'].'</a><br>';
+		if($x%5==0){
+		  echo '<div class="row">';
+		}
+		echo '<div class="span2">';
+			echo '<img src="'.$book['cover_url'].'">';
+			echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
+			echo '<p class="text-center">';
+			if($user['is_self'] || $user['isfriend']){
+				foreach ($notes as $note){
+					if($book['isbn'] == $note['isbn']){
+						if($user['is_self'] || $user['isfriend'] || $note['visibility'] == 2)
+						echo '<a href="/index.php/notes/view/'.$note['nid'].'">Note: page '.$note['page'].'</a><br>';
+					}
 				}
 			}
+			echo '</p>';
+			echo '</div>';
+		if($x%5==4){
+		  echo '</div>';
 		}
-		echo '</p>';
+		$x++;
+		}
+	if($x%5!=0) 
 		echo '</div>';
-	}
 	?>
-	</div>
 </div>
 
 <hr>
 <div class="row">
 	<h3>Books <?php if($user['is_self']) echo'I have '; else echo'he/she has ' ?>already read:</h3>
-	<div class="row">
-	<p>
-	<?php foreach ($read as $book){
-		echo '<div class="span3">';
-		echo '<img src="'.$book['cover_url'].'">';
-		echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
-		echo '<p class="text-center">';
-		foreach ($reviews as $review){
-			if($book['isbn'] == $review['isbn']){
-				if($review['visibility'] == 1 || $user['admin'])
-				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">Review: '.$review['rtitle'].'</a><br>';
+	<?php 
+		//echo '<div class="row">';
+		$x=0;
+		foreach ($read as $book){	
+			if($x%5==0){
+			  echo '<div class="row">';
 			}
+			echo '<div class="span2">';
+			echo '<img src="'.$book['cover_url'].'">';
+			echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
+			echo '<p class="text-center">';
+			foreach ($reviews as $review){
+				if($book['isbn'] == $review['isbn']){
+					if($review['visibility'] == 1 || $user['admin'])
+					echo '<a href="/index.php/reviews/view/'.$review['rid'].'">Review: '.$review['rtitle'].'</a><br>';
+				}
+			}
+			echo '</p>';
+			echo '</div>';
+			if($x%5==4){
+			  echo '</div>';
+			}
+			$x++;
 		}
-		echo '</p>';
+	if($x%5!=0) 
 		echo '</div>';
-	}
 	?>
-	</p>
-	</div>
 </div>
 
 <hr>
@@ -108,7 +125,7 @@
 	<div class="row">
 	<p>
 	<?php foreach ($wantstoread as $book){
-		echo '<div class="span3">';
+		echo '<div class="span2">';
 		echo '<img src="'.$book['cover_url'].'">';
 		echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
 		echo '</p>';

@@ -6,7 +6,7 @@ class Users_model extends CI_Model {
 		$this->load->database();
 	}
   //////////////////////////////////////////////////////////////////////////////////////
-	function login($username,$password){
+	function login(){
 		$this->load->helper('string');
 		$user_name = quotes_to_entities($this->input->post('username'));
 

@@ -12,7 +12,7 @@
 		</p>
         <p>Publisher: <?php echo $books_item['PUBLISHER'] ?></p>
 		<p>ISBN: <?php echo $books_item['ISBN'] ?></p>
-		<p><?php echo $books_item['STARS']?> stars (<?php echo $books_item['COUNT']?>)</p>
+		<p><?php echo number_format($books_item['STARS'],1)?> stars (<?php echo $books_item['COUNT']?>)</p>
 
 		<?php echo form_open('books/change_status',array('class'=>'form-inline'),array('isbn'=>$books_item['ISBN'])); ?>
 		<label>I want to read it (<?php echo $books_item['WANTSTOREAD_NUM']?>)</label>
@@ -102,7 +102,7 @@
 		<?php if($x>4) break; ?> 
 		<div class="span2">
 			<img src="<?php echo $book['COVER_URL'] ?>">
-			<h4 class="text-center"><a href="<?php echo site_url('books/view/'.$book['ISBN']) ?>"><?php echo $book['BNAME'] ?></a></h4>
+			<p class="text-center"><a href="<?php echo site_url('books/view/'.$book['ISBN']) ?>"><?php echo $book['BNAME'] ?></a></p>
 			<p class="text-center">
 			<?php foreach ($book['AUTHORS'] as $author):?>
 				<?php echo $author['ANAME'] ?>&nbsp;&nbsp;

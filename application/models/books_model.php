@@ -79,11 +79,13 @@ class Books_model extends CI_Model {
 	}
 
 	public function search_books($keyword = FALSE){
+	$this->load->helper('string');
 	if ($keyword === FALSE)
 	  {
 		$query = $this->db->get('Books');
 	  }
 	else{
+	  $keyword = quotes_to_entities($keyword);
 	  $this->db->distinct();
 	  $this->db->select('Books.ISBN');
 	  $this->db->from('Books');

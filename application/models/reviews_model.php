@@ -23,7 +23,7 @@ class Reviews_model extends CI_Model {
 	}
 	$title = quotes_to_entities($this->input->post('title'));
 	$content = quotes_to_entities($this->input->post('content'));
-	$sql = "insert into REVIEW_GENERATEDFROM (USER_ID, ISBN, RTITLE, STARS, RCONTENT, VISIBILITY, RDATE) values ('".$this->session->userdata('user_id')."','".$this->input->post('isbn')."','".$title."','".$this->input->post('rating')."','".$content."','1',to_date('".unix_to_human($now)."','YYYY-MM-DD HH:MI AM'))";
+	$sql = "insert into REVIEW_GENERATEDFROM (USER_ID, ISBN, RTITLE, STARS, RCONTENT, VISIBILITY, RDATE) values ('".$this->session->userdata('user_id')."','".$this->input->post('isbn')."','".$title."','".$this->input->post('rating')."','".$content."','1',to_date('".unix_to_human($now,TRUE)."','YYYY-MM-DD HH:MI:SS AM'))";
 	
 	$this->db->query($sql);
 
@@ -70,7 +70,7 @@ class Reviews_model extends CI_Model {
 	$content=quotes_to_entities($this->input->post('content'));
 	$query = $this->db->query('
 		insert into monitors (aid, mdate, rid, operation, reason)
-		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
+		values ('.$data['user_id'].',to_date(\''.unix_to_human($now,TRUE).'\',\'YYYY-MM-DD HH:MI:SS AM\'),
 			'.$data['review_item']['RID'].', 0, \''.$content.'\')
 	');
   }
@@ -87,7 +87,7 @@ class Reviews_model extends CI_Model {
 	$content=quotes_to_entities($this->input->post('content'));
 	$query = $this->db->query('
 		insert into monitors (aid, mdate, rid, operation, reason)
-		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
+		values ('.$data['user_id'].',to_date(\''.unix_to_human($now,TRUE).'\',\'YYYY-MM-DD HH:MI:SS AM\'),
 			'.$data['review_item']['RID'].', 1, \''.$content.'\')
 	');
   }

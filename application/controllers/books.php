@@ -58,6 +58,7 @@ class Books extends CI_Controller {
 	  
 	  $this->load->view('templates/header', array('title'=>$data['books_item']['BNAME']));
 	  $this->load->view('templates/navigation_view',$user_data);
+	  $this->load->view('books/search',array('keyword'=>''));
 	  $this->load->view('books/view', $data);
 	  $this->load->view('templates/footer');
     

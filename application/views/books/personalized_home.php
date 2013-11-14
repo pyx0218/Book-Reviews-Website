@@ -7,7 +7,7 @@
 	<div class="span2">
 		<img src="<?php echo $book_item['COVER_URL'] ?>">
 		<p class="text-center"><a href="<?php echo site_url('books/view/'.$book_item['ISBN']) ?>"><?php echo $book_item['BNAME'] ?></a></p>
-		<p class="text-center"><?php echo $book_item['STARS']?> stars (<?php echo $book_item['COUNT']?>)</p>
+		<p class="text-center"><?php echo number_format($book_item['STARS'],1)?> stars (<?php echo $book_item['COUNT']?>)</p>
 		<p class="text-center">Want to read (<?php echo $book_item['WANTSTOREAD_NUM']?>)<br>
 		Reading (<?php echo $book_item['READING_NUM']?>)<br> 
 		Read (<?php echo $book_item['READ_NUM']?>)</p>
@@ -27,7 +27,7 @@
 	<div class="span2">
 		<img src="<?php echo $book_item['COVER_URL'] ?>">
 		<p class="text-center"><a href="<?php echo site_url('books/view/'.$book_item['ISBN']) ?>"><?php echo $book_item['BNAME'] ?></a></p>
-		<p class="text-center"><?php echo $book_item['STARS']?> stars (<?php echo $book_item['COUNT']?>)</p>
+		<p class="text-center"><?php echo number_format($book_item['STARS'],1)?> stars (<?php echo $book_item['COUNT']?>)</p>
 		<p class="text-center">Want to read (<?php echo $book_item['WANTSTOREAD_NUM']?>)<br> 
 		Reading (<?php echo $book_item['READING_NUM']?>)<br> 
 		Read (<?php echo $book_item['READ_NUM']?>)</p>
@@ -47,7 +47,7 @@
 	<div class="span2">
 		<img src="<?php echo $book_item['COVER_URL'] ?>">
 		<p class="text-center"><a href="<?php echo site_url('books/view/'.$book_item['ISBN']) ?>"><?php echo $book_item['BNAME'] ?></a></p>
-		<p class="text-center"><?php echo $book_item['STARS']?> stars (<?php echo $book_item['COUNT']?>)</p>
+		<p class="text-center"><?php echo number_format($book_item['STARS'],1)?> stars (<?php echo $book_item['COUNT']?>)</p>
 		<p class="text-center">Want to read (<?php echo $book_item['WANTSTOREAD_NUM']?>)<br>
 		Reading (<?php echo $book_item['READING_NUM']?>)<br> 
 		Read (<?php echo $book_item['READ_NUM']?>)</p>
