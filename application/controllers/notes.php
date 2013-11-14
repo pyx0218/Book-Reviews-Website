@@ -13,12 +13,10 @@ class Notes extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->library('form_validation');
 	if($this->session->userdata('logged_in')){
-		
+		$user_data = $this->session->all_userdata();
 		$books_item = $this->books_model->get_book($isbn);
-		$this->load->view('templates/navigation_view');
-		
-		$this->load->view('books/header', array('title'=>'Take a note'));  
-		
+		$this->load->view('templates/header', array('title'=>'Take a note'));  
+		$this->load->view('templates/navigation_view',$user_data);
 		$this->load->view('notes/create', $books_item);
 		$this->load->view('templates/footer');
 	}
@@ -39,8 +37,8 @@ class Notes extends CI_Controller {
 		if($this->input->post('submit')=='Submit'){
 			if($this->form_validation->run()===FALSE){
 				$books_item = $this->books_model->get_book(strip_quotes($isbn));
+				$this->load->view('templates/header', array('title'=>'Take a note')); 
 				$this->load->view('templates/navigation_view');
-				$this->load->view('books/header', array('title'=>'Take a note'));  
 				$this->load->view('notes/create', $books_item);
 				$this->load->view('templates/footer');
 			}
@@ -67,10 +65,9 @@ class Notes extends CI_Controller {
 	show_404();
 	
 	$data['title'] = 'Note';
-	$data['user_name'] = $this->session->userdata('user_name');
-	
-	$this->load->view('templates/navigation_view');	
-	$this->load->view('books/header', $data);
+	$user_data = $this->session->all_userdata();
+	$this->load->view('templates/header', $data);
+	$this->load->view('templates/navigation_view',$user_data);	
 	$this->load->view('notes/view', $note_item);
 	$this->load->view('templates/footer'); 
   }
@@ -81,13 +78,10 @@ class Notes extends CI_Controller {
 	$this->load->library('form_validation');
 	
 	if($this->session->userdata('logged_in')){
-		$data['title'] = 'Edit a note';
 		$note_item = $this->notes_model->get_note($nid);
-		$data['user_name'] = $this->session->userdata('user_name');
-		
-		$this->load->view('templates/navigation_view');
-		$this->load->view('books/header', $data);  
-		
+		$user_data = $this->session->all_userdata();
+		$this->load->view('templates/header', array('title'=>'Edit a note'));
+		$this->load->view('templates/navigation_view',$user_data);
 		$this->load->view('notes/edit', $note_item);
 		$this->load->view('templates/footer');
 	}
@@ -108,8 +102,9 @@ class Notes extends CI_Controller {
 		if($this->input->post('submit')=='Save'){
 			$note_item = $this->notes_model->get_note(strip_quotes($nid));
 			if($this->form_validation->run()===FALSE){
-				$this->load->view('templates/navigation_view');
-				$this->load->view('books/header', array('title'=>'Edit a note'));  
+				$user_data = $this->session->all_userdata();
+				$this->load->view('templates/header', array('title'=>'Edit a note')); 
+				$this->load->view('templates/navigation_view',$user_data); 
 				$this->load->view('notes/edit', $note_item);
 				$this->load->view('templates/footer');
 			}

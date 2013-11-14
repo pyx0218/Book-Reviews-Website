@@ -103,36 +103,39 @@ class Users_model extends CI_Model {
 		}
 		$idx = 0;
 		$reading = array();
-		$query = $this->db->query('select distinct B.bname, B.isbn
+		$query = $this->db->query('select distinct B.bname, B.isbn, B.cover_url 
 			from Reading R, books B
 			WHERE R.USER_ID = '.$user_id.' and B.isbn = R.isbn');
 		foreach ($query->result() as $row){
 			$reading[$idx++] = array(
 				'bname' => $row->BNAME,
 				'isbn' => $row->ISBN,
+				'cover_url' => $row->COVER_URL
 				);
 		}
 		$idx = 0;
 		$read = array();
-		$query = $this->db->query('select distinct B.bname, B.isbn
+		$query = $this->db->query('select distinct B.bname, B.isbn, B.cover_url 
 			from read R, books B
 			WHERE R.USER_ID = '.$user_id.' and B.isbn = R.isbn');
 		foreach ($query->result() as $row){
 			$read[$idx++] = array(
 				'bname' => $row->BNAME,
 				'isbn' => $row->ISBN,
+				'cover_url' => $row->COVER_URL
 			);
 		}
 		//////
 		$idx = 0;
 		$wantstoread = array();
-		$query = $this->db->query('select distinct B.bname, B.isbn
+		$query = $this->db->query('select distinct B.bname, B.isbn, B.cover_url 
 			from wantstoread R, books B
 			WHERE R.USER_ID = '.$user_id.' and B.isbn = R.isbn');
 		foreach ($query->result() as $row){
 			$wantstoread[$idx++] = array(
 				'bname' => $row->BNAME,
 				'isbn' => $row->ISBN,
+				'cover_url' => $row->COVER_URL
 			);
 		}
 		////////

@@ -1,5 +1,3 @@
-
-
 <h2><?php 
 	echo $user['name'];
 	if($user['admin']){
@@ -7,7 +5,7 @@
 	}
 ?></h2>
 <?php if($user['is_self'] == false && $user['isfriend'] == false){
-	echo '<a href = "/index.php/users/add_friend/'.$user['user_id'].'">Become Friend!</a>';
+	echo '<a class="btn" href = "/index.php/users/add_friend/'.$user['user_id'].'">Become Friend!</a>';
 	}?>
 
 <?php
@@ -39,63 +37,85 @@
 	}
  ?>
 
-<div id="main">
+<hr>
+<div class="row">
 	<h3><?php if($user['is_self']) echo'My '; else echo'His/her ' ?>friends:</h3>
 	<p>
 	<?php foreach ($friends as $fname){
 		echo '<a href="/index.php/users/view/'.$fname['user_id'].'">'.$fname['name'].'</a>&nbsp;&nbsp;';
 		if($user['is_self']){
-			echo '<a href="/index.php/users/unfriend/'.$fname['user_id'].'">unfriend</a>';
+			echo '<a class="btn" href="/index.php/users/unfriend/'.$fname['user_id'].'">unfriend</a>';
 		}
 		echo '<br>';
 		
 	}  ?>
 	</p>
 </div>
-<div>
+
+<hr>
+<div class="row">
 	<h3>Books <?php if($user['is_self']) echo'I\'m '; else echo'he/she is ' ?>reading now:</h3>
-	<p>
+	<div class="row">
 	<?php
 		foreach ($reading as $book){
-		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a>&nbsp;&nbsp;';
+		echo '<div class="span3">';
+		 echo '<img src="'.$book['cover_url'].'">';
+		 echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
+		 echo '<p class="text-center">';
 		if($user['is_self'] || $user['isfriend']){
 			foreach ($notes as $note){
 				if($book['isbn'] == $note['isbn']){
 					if($user['is_self'] || $user['isfriend'] || $note['visibility'] == 2)
-					echo '<a href="/index.php/notes/view/'.$note['nid'].'">note: page '.$note['page'].'</a>&nbsp;&nbsp;';
+					echo '<a href="/index.php/notes/view/'.$note['nid'].'">Note: page '.$note['page'].'</a><br>';
 				}
 			}
 		}
-		
-		echo '<br>';
+		echo '</p>';
+		echo '</div>';
 	}
 	?>
-	</p>
+	</div>
 </div>
-<div>
+
+<hr>
+<div class="row">
 	<h3>Books <?php if($user['is_self']) echo'I have '; else echo'he/she has ' ?>already read:</h3>
+	<div class="row">
 	<p>
 	<?php foreach ($read as $book){
-		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a>&nbsp;&nbsp;';
+		echo '<div class="span3">';
+		echo '<img src="'.$book['cover_url'].'">';
+		echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
+		echo '<p class="text-center">';
 		foreach ($reviews as $review){
 			if($book['isbn'] == $review['isbn']){
 				if($review['visibility'] == 1 || $user['admin'])
-				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">review: '.$review['rtitle'].'</a>&nbsp;&nbsp;';
+				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">review: '.$review['rtitle'].'</a><br>';
 			}
 		}
-		echo '<br>';
+		echo '</p>';
+		echo '</div>';
 	}
 	?>
 	</p>
+	</div>
 </div>
-<div>
+
+<hr>
+<div class="row">
 	<h3>Books <?php if($user['is_self']) echo'I want '; else echo'he/she wants ' ?>to read:</h3>
+	<div class="row">
 	<p>
 	<?php foreach ($wantstoread as $book){
-		echo '<a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a><br>';
+		echo '<div class="span3">';
+		echo '<img src="'.$book['cover_url'].'">';
+		echo '<p class="text-center"><a href="/index.php/books/view/'.$book['isbn'].'">'.$book['bname'].'</a></p>';
+		echo '</p>';
+		echo '</div>';
 	}
 	?>
 	</p>
+	</div>
 </div>
 
 

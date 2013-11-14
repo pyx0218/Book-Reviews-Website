@@ -16,9 +16,10 @@ class Reviews extends CI_Controller {
 	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
 	
 	if($this->session->userdata('logged_in')){
+		$user_data = $this->session->all_userdata();
 		$books_item = $this->books_model->get_book($isbn);
-		$this->load->view('templates/navigation_view');
-		$this->load->view('books/header', array('title'=>'Write a Review'));  
+		$this->load->view('templates/header', array('title'=>'Write a Review')); 
+		$this->load->view('templates/navigation_view',$user_data);
 		$this->load->view('reviews/create', $books_item);
 		$this->load->view('templates/footer');
 	}
@@ -39,8 +40,9 @@ class Reviews extends CI_Controller {
 		if($this->input->post('submit')=='Submit'){
 			if($this->form_validation->run()===FALSE){
 				$books_item = $this->books_model->get_book(strip_quotes($isbn));
-				$this->load->view('templates/navigation_view');
-				$this->load->view('books/header', array('title'=>'Write a Review'));  
+				$user_data = $this->session->all_userdata();
+				$this->load->view('templates/header', array('title'=>'Write a Review'));
+				$this->load->view('templates/navigation_view',$user_data);
 				$this->load->view('reviews/create', $books_item);
 				$this->load->view('templates/footer');
 			}
@@ -65,15 +67,18 @@ class Reviews extends CI_Controller {
 	  
 	  if (empty($review_item) or ($review_item['VISIBILITY']==0 and !$this->session->userdata('admin')))
 		show_404();
-	  $data = $this->session->all_userdata();
-	  $data['title'] = $review_item['RTITLE'].' (Review: '.$review_item['BNAME'].')';
+	  $user_data = $this->session->all_userdata();
+	  $data=$user_data;
 	  $data['review_item'] = $review_item;
-	  if($data['user_id'] == $review_item['USER_ID'])
-		$data['is_self'] = true;
-	  else
-		$data['is_self'] = false;
-	  $this->load->view('templates/navigation_view');
-	  $this->load->view('books/header', $data);
+	  if(!empty($user_data['logged_in'])){
+		  if($data['user_id'] == $review_item['USER_ID'])
+			$data['is_self'] = true;
+		  else
+			$data['is_self'] = false;
+	  }
+	  $user_data = $this->session->all_userdata();
+	  $this->load->view('templates/header', array('title'=>$review_item['RTITLE'].' (Review: '.$review_item['BNAME'].')'));
+	  $this->load->view('templates/navigation_view',$user_data);
 	  $this->load->view('reviews/view', $data);
 	  $this->load->view('templates/footer'); 
   }
@@ -87,8 +92,9 @@ class Reviews extends CI_Controller {
 	
 	if($this->session->userdata('logged_in')){
 		$review_item = $this->reviews_model->get_review($rid);
-		$this->load->view('templates/navigation_view');
-		$this->load->view('books/header', array('title','Edit a Review'));  
+		$user_data = $this->session->all_userdata();
+		$this->load->view('templates/header', array('title','Edit a Review'));
+		$this->load->view('templates/navigation_view',$user_data); 
 		$this->load->view('reviews/edit', $review_item);
 		$this->load->view('templates/footer');
 	}
@@ -109,8 +115,9 @@ class Reviews extends CI_Controller {
 		if($this->input->post('submit')=='Save'){
 			$review_item = $this->reviews_model->get_review(strip_quotes($rid));
 			if($this->form_validation->run()===FALSE){
-				$this->load->view('templates/navigation_view');
-				$this->load->view('books/header', array('title'=>'Edit a Review'));  
+				$user_data = $this->session->all_userdata();
+				$this->load->view('templates/header', array('title'=>'Edit a Review'));
+				$this->load->view('templates/navigation_view',$user_data); 
 				$this->load->view('reviews/edit', $review_item);
 				$this->load->view('templates/footer');
 			}
@@ -142,27 +149,23 @@ class Reviews extends CI_Controller {
 	$this->load->helper('form');
 	$this->load->library('form_validation');
 	$this->form_validation->set_rules('content', 'Content', 'trim|required|max_length[500]');
-	if($this->form_validation->run()===FALSE){
-		$review_item = $this->reviews_model->get_review($rid);
-		$data = $this->session->all_userdata();
-		$data['review_item'] = $review_item;
-		$this->load->view('templates/navigation_view');
-		$this->load->view('reviews/shield_view', $data);
-		$this->load->view('templates/footer');
-	}
-	else{
-		if($this->input->post('submit')=='Submit'){
+		if($this->form_validation->run()===FALSE){
 			$review_item = $this->reviews_model->get_review($rid);
 			$data = $this->session->all_userdata();
 			$data['review_item'] = $review_item;
-			
-			$this->reviews_model->shield_review($data);
-			redirect('books/view/'.$review_item['ISBN']);
+			$this->load->view('templates/header', array('title'=>'Shield a Review'));
+			$this->load->view('templates/navigation_view',$data);
+			$this->load->view('reviews/shield_view', $data);
+			$this->load->view('templates/footer');
 		}
-		else if($this->input->post('submit')=='Cancel'){
-			redirect('reviews/view/'.$rid);
+		else{
+				$review_item = $this->reviews_model->get_review($rid);
+				$data = $this->session->all_userdata();
+				$data['review_item'] = $review_item;
+				
+				$this->reviews_model->shield_review($data);
+				redirect('users/view/'.$data['user_id']);
 		}
-	}
   }
   
   public function restore($rid){
@@ -173,22 +176,18 @@ class Reviews extends CI_Controller {
 		$review_item = $this->reviews_model->get_review($rid);
 		$data = $this->session->all_userdata();
 		$data['review_item'] = $review_item;
-		$this->load->view('templates/navigation_view');
+		$this->load->view('templates/header', array('title'=>'Restore a Review'));
+		$this->load->view('templates/navigation_view',$data);
 		$this->load->view('reviews/restore_view', $data);
 		$this->load->view('templates/footer');
 	}
 	else{
-		if($this->input->post('submit')=='Submit'){
 			$review_item = $this->reviews_model->get_review($rid);
 			$data = $this->session->all_userdata();
 			$data['review_item'] = $review_item;
 			
 			$this->reviews_model->restore_review($data);
-			redirect('books/view/'.$review_item['ISBN']);
-		}
-		else if($this->input->post('submit')=='Cancel'){
-			redirect('reviews/view/'.$rid);
-		}
+			redirect('users/view/'.$data['user_id']);
 	}
   }
   
