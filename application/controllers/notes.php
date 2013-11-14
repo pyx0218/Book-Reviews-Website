@@ -17,7 +17,7 @@ class Notes extends CI_Controller {
 		$books_item = $this->books_model->get_book($isbn);
 		$this->load->view('templates/navigation_view');
 		
-		$this->load->view('books/header', array('title'=>'Write a note'));  
+		$this->load->view('books/header', array('title'=>'Take a note'));  
 		
 		$this->load->view('notes/create', $books_item);
 		$this->load->view('templates/footer');
@@ -36,22 +36,26 @@ class Notes extends CI_Controller {
 	
 	if($this->session->userdata('logged_in')){
 		$isbn = $this->input->post('isbn');
-		$books_item = $this->books_model->get_book(strip_quotes($isbn));
-		if($this->form_validation->run()===FALSE){
-			$this->load->view('templates/navigation_view');
-			$this->load->view('books/header', array('title'=>'Write a note'));  
-			$this->load->view('notes/create', $books_item);
-			$this->load->view('templates/footer');
+		if($this->input->post('submit')=='Submit'){
+			if($this->form_validation->run()===FALSE){
+				$books_item = $this->books_model->get_book(strip_quotes($isbn));
+				$this->load->view('templates/navigation_view');
+				$this->load->view('books/header', array('title'=>'Take a note'));  
+				$this->load->view('notes/create', $books_item);
+				$this->load->view('templates/footer');
+			}
+			else{
+				$nid = $this->notes_model->add_note();
+				redirect('notes/view/'.$nid);
+			}
 		}
-		else{
-			$nid = $this->notes_model->add_note();
-			redirect('notes/view/'.$nid);
+		elseif($this->input->post('cancel')=='Return') {
+			redirect('books/view/'.$isbn);
 		}
 	}
 	else{
 		redirect('users/login');
 	}
-	
   }
   
   public function view($nid)

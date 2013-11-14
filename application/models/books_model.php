@@ -14,6 +14,7 @@ class Books_model extends CI_Model {
 	  return $query->row_array();
   }
   
+  //sorted by #want to read+#reading+#read
 	public function get_popular_books(){
 		$table1 = '(select Books.ISBN,count(USER_ID) as COUNT1 from Books left outer join WantsToRead on Books.ISBN=WantsToRead.ISBN group by Books.ISBN) table1';
 		$table2 = '(select Books.ISBN,count(USER_ID) as COUNT2 from Books left outer join Reading on Books.ISBN=Reading.ISBN group by Books.ISBN) table2';
@@ -21,6 +22,7 @@ class Books_model extends CI_Model {
 		$sql = 'select table1.ISBN from '.$table1.','.$table2.','.$table3.' where table1.ISBN=table2.ISBN and table2.ISBN=table3.ISBN order by COUNT1+COUNT2+COUNT3 desc';
 		$query = $this->db->query($sql);
 		$x=0;
+		$info=array();
 		foreach($query->result_array() as $row){
 			$info[$x]=$this->books_model->get_book($row['ISBN']);
 			$info[$x]['AUTHORS']=$this->books_model->get_book_authors_name($row['ISBN']);
@@ -31,12 +33,49 @@ class Books_model extends CI_Model {
 		return $info;
 	}
 	
+	//find the books wrote by the same author or belong to the same tag with those the user likes
 	public function get_may_like_books(){
-	
+		if($this->session->userdata('logged_in')){
+			$user_id = $this->session->userdata('user_id');
+			$isbns = 'select ISBN from WantsToRead where USER_ID='.$user_id.' union select ISBN from Reading where USER_ID='.$user_id.' union select ISBN from Read where USER_ID='.$user_id;
+			$aids = 'select AID from WroteBy, ('.$isbns.') table1 where WroteBy.ISBN=table1.ISBN';
+			$tags = 'select TNAME from BelongsTo, ('.$isbns.') table2 where BelongsTo.ISBN=table2.ISBN';
+			$sql = 'select distinct WroteBy.ISBN from WroteBy, BelongsTo where WroteBy.ISBN=BelongsTo.ISBN and (AID in ('.$aids.') or TNAME in ('.$tags.')) and WroteBy.ISBN not in ('.$isbns.')';
+			$query = $this->db->query($sql);
+			$x=0;
+			$info=array();
+			foreach($query->result_array() as $row){
+				$info[$x]=$this->books_model->get_book($row['ISBN']);
+				$info[$x]['AUTHORS']=$this->books_model->get_book_authors_name($row['ISBN']);
+				$info[$x]=array_merge($info[$x],$this->books_model->get_book_avgstar($row['ISBN']));
+				$info[$x]=array_merge($info[$x],$this->books_model->get_book_reader_num($row['ISBN']));
+				$x++;
+			}
+			return $info;
+		}
 	}
 	
 	public function get_friend_books(){
-	
+		if($this->session->userdata('logged_in')){
+			$user_id=$this->session->userdata('user_id');
+			$friends_id='select USER_ID1 as USER_ID 
+				from FRIENDOF where USER_ID2 = '.$user_id.'
+				UNION
+				select USER_ID2 as USER_ID 
+				from FRIENDOF where USER_ID1 = '.$user_id;
+			$sql = 'select ISBN from Reading where USER_ID in ('.$friends_id.')';
+			$query = $this->db->query($sql);
+			$x=0;
+			$info=array();
+			foreach($query->result_array() as $row){
+				$info[$x]=$this->books_model->get_book($row['ISBN']);
+				$info[$x]['AUTHORS']=$this->books_model->get_book_authors_name($row['ISBN']);
+				$info[$x]=array_merge($info[$x],$this->books_model->get_book_avgstar($row['ISBN']));
+				$info[$x]=array_merge($info[$x],$this->books_model->get_book_reader_num($row['ISBN']));
+				$x++;
+			}
+			return $info;
+		}
 	}
 
 	public function search_books($keyword = FALSE){
@@ -162,7 +201,8 @@ class Books_model extends CI_Model {
 		return $query->result_array();
 	}
 	
-	public function get_book_friend_notes($isbn){
+	//get the notes with visibility=2 and his/her friends' notes and his/herself's notes 
+	public function get_book_notes($isbn){
 		if(!$this->session->userdata('logged_in')){
 			return FALSE;
 		}
@@ -172,7 +212,7 @@ class Books_model extends CI_Model {
 			UNION
 			select USER_ID2 as USER_ID 
 			from FRIENDOF where USER_ID1 = '.$user_id;
-		$query = $this->db->query("select * from Note_Records, Users where Note_Records.USER_ID = Users.USER_ID and VISIBILITY=1 and ISBN='".$isbn."' and Note_Records.USER_ID in (".$friends_id.")");
+		$query = $this->db->query("select distinct * from Note_Records, Users where Note_Records.USER_ID = Users.USER_ID and ISBN='".$isbn."' and (VISIBILITY=2 or Note_Records.USER_ID in (".$friends_id.") or Note_Records.USER_ID=".$user_id.")");
 		return $query->result_array();
 	}
 	
@@ -202,7 +242,7 @@ class Books_model extends CI_Model {
 		$info = array_merge($info,$this->books_model->get_book_reader_num($isbn));
 		$info['TAGS'] = $this->books_model->get_book_tags($isbn);
 		$info['REVIEWS'] = $this->books_model->get_book_reviews($isbn);
-		$info['NOTES'] = $this->books_model->get_book_friend_notes($isbn);
+		$info['NOTES'] = $this->books_model->get_book_notes($isbn);
 		$info['RECOMBOOKS'] = $this->books_model->get_book_like_also_like($isbn);
 		$info = array_merge($info, $this->books_model->get_book_reader_flag($isbn));
 		return $info;

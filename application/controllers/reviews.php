@@ -36,16 +36,21 @@ class Reviews extends CI_Controller {
 
 	if($this->session->userdata('logged_in')){
 		$isbn = $this->input->post('isbn');
-		$books_item = $this->books_model->get_book(strip_quotes($isbn));
-		if($this->form_validation->run()===FALSE){
-			$this->load->view('templates/navigation_view');
-			$this->load->view('books/header', array('title'=>'Write a Review'));  
-			$this->load->view('reviews/create', $books_item);
-			$this->load->view('templates/footer');
+		if($this->input->post('submit')=='Submit'){
+			if($this->form_validation->run()===FALSE){
+				$books_item = $this->books_model->get_book(strip_quotes($isbn));
+				$this->load->view('templates/navigation_view');
+				$this->load->view('books/header', array('title'=>'Write a Review'));  
+				$this->load->view('reviews/create', $books_item);
+				$this->load->view('templates/footer');
+			}
+			else{
+				$rid = $this->reviews_model->add_review();
+				redirect('reviews/view/'.$rid);
+			}
 		}
-		else{
-			$rid = $this->reviews_model->add_review();
-			redirect('reviews/view/'.$rid);
+		elseif($this->input->post('cancel')=='Return') {
+			redirect('books/view/'.$isbn);
 		}
 	}
 	else{
@@ -101,7 +106,6 @@ class Reviews extends CI_Controller {
 
 	if($this->session->userdata('logged_in')){
 		$rid = $this->input->post('rid');
-		echo $this->input->post('submit');
 		if($this->input->post('submit')=='Save'){
 			$review_item = $this->reviews_model->get_review(strip_quotes($rid));
 			if($this->form_validation->run()===FALSE){

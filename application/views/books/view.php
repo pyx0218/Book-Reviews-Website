@@ -33,7 +33,7 @@
 </div>
 <div>
 <a href="<?php echo site_url('reviews/new_review/'.$books_item['ISBN']) ?>">Write a Review</a>&nbsp;&nbsp;
-<a href="<?php echo site_url('notes/new_note/'.$books_item['ISBN']) ?>">Write a Note</a>
+<a href="<?php echo site_url('notes/new_note/'.$books_item['ISBN']) ?>">Take a Note</a>
 </div>
 <div>
 <img src="<?php echo $books_item['COVER_URL'] ?>">
@@ -70,9 +70,10 @@
 </div>
 <?php if (!empty($books_item['NOTES'])): ?>
 <div>
-<h3>Notes From Friends</h3>
+<h3>Notes</h3>
 <?php foreach ($books_item['NOTES'] as $note):?>
-<p><a href="<?php echo site_url('users/view/'.$note['USER_ID']) ?>"><?php echo $note['UNAME'] ?></a>&nbsp;&nbsp; page <?php echo $note['PAGE'] ?></p>
+<h4><a href="<?php echo site_url('notes/view/'.$note['NID']) ?>">page<?php echo $note['PAGE'] ?></a></h4>
+<a href="<?php echo site_url('users/view/'.$note['USER_ID']) ?>"><?php echo $note['UNAME'] ?></a><br>
 <p><?php echo $note['NCONTENT'] ?></p>
 <p><?php echo $note['NDATE'] ?></p>
 <?php endforeach ?>

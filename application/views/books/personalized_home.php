@@ -21,7 +21,7 @@
 <?php endforeach ?>
 <?php endif ?>
 <?php if(!empty($friend_books)): ?>
-<h3>Books You May Interested In</h3>
+<h3>Books Your Friends Are Reading</h3>
 <?php $x=0; ?>
 <?php foreach ($friend_books as $book_item): ?>
 	<?php if($x>4) break; ?> 
