@@ -91,7 +91,7 @@
 		foreach ($reviews as $review){
 			if($book['isbn'] == $review['isbn']){
 				if($review['visibility'] == 1 || $user['admin'])
-				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">review: '.$review['rtitle'].'</a><br>';
+				echo '<a href="/index.php/reviews/view/'.$review['rid'].'">Review: '.$review['rtitle'].'</a><br>';
 			}
 		}
 		echo '</p>';

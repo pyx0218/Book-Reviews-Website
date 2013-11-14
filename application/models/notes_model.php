@@ -9,22 +9,23 @@ class Notes_model extends CI_Model {
   
   public function add_note(){
 	$this->load->helper('date');
+	$this->load->helper('string');
 	$now=time();
 
 	$data = array(
 		'ISBN' => $this->input->post('isbn'),
-		'USER_ID' => $this->session->userdata('user_id'),
+		'USER_ID' => $this->session->userdata('user_id')
 	);
 	$query=$this->db->get_where('READING',$data);
 	$temp=$query->result_array();
 	if(empty($temp)){
 		$this->db->insert('READING',$data);
 	}
-	
+	$content = quotes_to_entities($this->input->post('content'));
 	$query = $this->db->query('
 		insert into note_records (user_id, isbn, ncontent, page, ndate, visibility)
 		values ('.$this->session->userdata('user_id').', \''.$this->input->post('isbn').'\', 
-			\''.$this->input->post('content').'\', '.$this->input->post('page').',
+			'.$content.', '.$this->input->post('page').',
 			to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'), '.$this->input->post('visibility').')
 	');
 
@@ -42,10 +43,12 @@ class Notes_model extends CI_Model {
   }
   
   public function update_note(){
+	$this->load->helper('string');
+	$content=quotes_to_entities($this->input->post('content'));
 	$data = array(
 		'PAGE' => $this->input->post('page'),
-		'NCONTENT' => $this->input->post('content'),
-		'VISIBILITY' => $this->input->post('visibility'),
+		'NCONTENT' => $content,
+		'VISIBILITY' => $this->input->post('visibility')
 	);
 	$this->db->where('nid',$this->input->post('nid'));
 	$this->db->update('note_records',$data);

@@ -93,7 +93,7 @@ class Reviews extends CI_Controller {
 	if($this->session->userdata('logged_in')){
 		$review_item = $this->reviews_model->get_review($rid);
 		$user_data = $this->session->all_userdata();
-		$this->load->view('templates/header', array('title','Edit a Review'));
+		$this->load->view('templates/header', array('title'=>'Edit a Review'));
 		$this->load->view('templates/navigation_view',$user_data); 
 		$this->load->view('reviews/edit', $review_item);
 		$this->load->view('templates/footer');

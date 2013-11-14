@@ -9,6 +9,7 @@ class Reviews_model extends CI_Model {
   
   public function add_review(){
 	$this->load->helper('date');
+	$this->load->helper('string');
 	$now=time();
 
 	$data = array(
@@ -20,27 +21,23 @@ class Reviews_model extends CI_Model {
 	if(empty($temp)){
 		$this->db->insert('READ',$data);
 	}
-	$sql = "insert into REVIEW_GENERATEDFROM (USER_ID, ISBN, RTITLE, STARS, RCONTENT, VISIBILITY, RDATE) values ('".$this->session->userdata('user_id')."','".$this->input->post('isbn')."','".$this->input->post('title')."','".$this->input->post('rating')."','".$this->input->post('content')."','1',to_date('".unix_to_human($now)."','YYYY-MM-DD HH:MI AM'))";
+	$title = quotes_to_entities($this->input->post('title'));
+	$content = quotes_to_entities($this->input->post('content'));
+	$sql = "insert into REVIEW_GENERATEDFROM (USER_ID, ISBN, RTITLE, STARS, RCONTENT, VISIBILITY, RDATE) values ('".$this->session->userdata('user_id')."','".$this->input->post('isbn')."','".$title."','".$this->input->post('rating')."','".$content."','1',to_date('".unix_to_human($now)."','YYYY-MM-DD HH:MI AM'))";
 	
-	/*$data = array(
-		'USER_ID' => $this->session->userdata('user_id'),
-		'ISBN' => $this->input->post('isbn'),
-		'RTITLE' => $this->input->post('title'),
-		'STARS' => $this->input->post('rating'),
-		'RCONTENT' => $this->input->post('content'),
-		'VISIBILITY' => 1,
-		'RDATE' => $date
-	);*/
 	$this->db->query($sql);
 
 	return $this->db->insert_id('rid');
   }
   
   public function update_review(){
+  	$this->load->helper('string');
+	$title=quotes_to_entities($this->input->post('title'));
+	$content=quotes_to_entities($this->input->post('content'));
 	$data = array(
-		'RTITLE' => $this->input->post('title'),
+		'RTITLE' => $title,
 		'STARS' => $this->input->post('rating'),
-		'RCONTENT' => $this->input->post('content')
+		'RCONTENT' => $content
 	);
 	$this->db->where('RID',$this->input->post('rid'));
 	$this->db->update('REVIEW_GENERATEDFROM',$data);
@@ -61,21 +58,25 @@ class Reviews_model extends CI_Model {
   }
   
   public function shield_review($data){
+	$this->load->helper('date');
+	$this->load->helper('string');
+	$now=time();
+	
 	$query = $this->db->query('
 		update review_generatedfrom
 		set visibility = 0
 		where rid = '.$data['review_item']['RID'].'
 	');
-	$this->load->helper('date');
-	$now=time();
+	$content=quotes_to_entities($this->input->post('content'));
 	$query = $this->db->query('
 		insert into monitors (aid, mdate, rid, operation, reason)
 		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
-			'.$data['review_item']['RID'].', 0, \''.$this->input->post('content').'\')
+			'.$data['review_item']['RID'].', 0, \''.$content.'\')
 	');
   }
   
   public function restore_review($data){
+    $this->load->helper('string');
 	$query = $this->db->query('
 		update review_generatedfrom
 		set visibility = 1
@@ -83,10 +84,11 @@ class Reviews_model extends CI_Model {
 	');
 	$this->load->helper('date');
 	$now=time();
+	$content=quotes_to_entities($this->input->post('content'));
 	$query = $this->db->query('
 		insert into monitors (aid, mdate, rid, operation, reason)
 		values ('.$data['user_id'].',to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'),
-			'.$data['review_item']['RID'].', 1, \''.$this->input->post('content').'\')
+			'.$data['review_item']['RID'].', 1, \''.$content.'\')
 	');
   }
   

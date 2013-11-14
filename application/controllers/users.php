@@ -21,7 +21,7 @@ class Users extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 	else{
-		$result = $this->users_model->login($this->input->post('username'), $this->input->post('password'));
+		$result = $this->users_model->login();
 		if($result){
 			redirect('books/');
 		}

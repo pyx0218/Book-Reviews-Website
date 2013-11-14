@@ -6,7 +6,6 @@ class Notes extends CI_Controller {
     parent::__construct();
 	$this->load->model('books_model');
 	$this->load->model('notes_model');
-	
   }
   
   public function new_note($isbn){
@@ -58,15 +57,13 @@ class Notes extends CI_Controller {
   
   public function view($nid)
   {
-	
 	$note_item = $this->notes_model->get_note($nid);
 
 	if (empty($note_item))
-	show_404();
+		show_404();
 	
-	$data['title'] = 'Note';
 	$user_data = $this->session->all_userdata();
-	$this->load->view('templates/header', $data);
+	$this->load->view('templates/header', array('title'=>'Note'));
 	$this->load->view('templates/navigation_view',$user_data);	
 	$this->load->view('notes/view', $note_item);
 	$this->load->view('templates/footer'); 
@@ -98,7 +95,6 @@ class Notes extends CI_Controller {
 	$this->form_validation->set_rules('visibility', 'Visibility', 'required');
 	if($this->session->userdata('logged_in')){
 		$nid = $this->input->post('nid');
-		echo $this->input->post('submit');
 		if($this->input->post('submit')=='Save'){
 			$note_item = $this->notes_model->get_note(strip_quotes($nid));
 			if($this->form_validation->run()===FALSE){

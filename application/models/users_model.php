@@ -7,8 +7,11 @@ class Users_model extends CI_Model {
 	}
   //////////////////////////////////////////////////////////////////////////////////////
 	function login($username,$password){
-		$this->db->where('UNAME', $username);
-		$this->db->where("PWD",$password);
+		$this->load->helper('string');
+		$user_name = quotes_to_entities($this->input->post('username'));
+
+		$this->db->where('UNAME', $user_name);
+		$this->db->where("PWD",$this->input->post('password'));
 		
 		$query=$this->db->get("users");
 		if($query->num_rows()>0){	
@@ -35,8 +38,10 @@ class Users_model extends CI_Model {
 	
 	////////////////////////////////////////////////////////////////////////////////////////
 	public function add_user(){
+		$this->load->helper('string');
+		$user_name=quotes_to_entities($this->input->post('user_name'));
 		$data=array(
-		'UNAME'=>$this->input->post('user_name'),
+		'UNAME'=>$user_name,
 		'PWD'=>($this->input->post('password'))
 		);
 		$this->db->insert('USERS',$data);
