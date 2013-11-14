@@ -13,7 +13,7 @@ class Notes_model extends CI_Model {
 
 	$data = array(
 		'ISBN' => $this->input->post('isbn'),
-		'USER_ID' => $this->session->userdata('user_id')
+		'USER_ID' => $this->session->userdata('user_id'),
 	);
 	$query=$this->db->get_where('READING',$data);
 	$temp=$query->result_array();
@@ -25,13 +25,14 @@ class Notes_model extends CI_Model {
 		insert into note_records (user_id, isbn, ncontent, page, ndate, visibility)
 		values ('.$this->session->userdata('user_id').', \''.$this->input->post('isbn').'\', 
 			\''.$this->input->post('content').'\', '.$this->input->post('page').',
-			to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'), 1)
+			to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'), '.$this->input->post('visibility').')
 	');
 
 	return $this->db->insert_id('nid');
   }
   
   public function get_note($nid){
+  
 	$query = $this->db->query('
 		select N.*, B.bname, U.uname
 		from note_records N, books B, users U
@@ -43,7 +44,8 @@ class Notes_model extends CI_Model {
   public function update_note(){
 	$data = array(
 		'PAGE' => $this->input->post('page'),
-		'NCONTENT' => $this->input->post('content')
+		'NCONTENT' => $this->input->post('content'),
+		'VISIBILITY' => $this->input->post('visibility'),
 	);
 	$this->db->where('nid',$this->input->post('nid'));
 	$this->db->update('note_records',$data);

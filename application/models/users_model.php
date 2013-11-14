@@ -186,6 +186,7 @@ class Users_model extends CI_Model {
 				select R.rtitle, R.rid, M.mdate, M.operation, M.reason
 				from monitors M, Review_generatedfrom R
 				where M.aid = '.$user_id.' and M.rid = R.rid
+				order by M.mdate
 			');
 			//echo $query->num_rows();
 			foreach ($query->result() as $row){

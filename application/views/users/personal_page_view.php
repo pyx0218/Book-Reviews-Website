@@ -61,6 +61,7 @@
 		if($user['is_self'] || $user['isfriend']){
 			foreach ($notes as $note){
 				if($book['isbn'] == $note['isbn']){
+					if($user['is_self'] || $user['isfriend'] || $note['visibility'] == 2)
 					echo '<a href="/index.php/notes/view/'.$note['nid'].'">note: page '.$note['page'].'</a>&nbsp;&nbsp;';
 				}
 			}

@@ -6,6 +6,7 @@ class Notes extends CI_Controller {
     parent::__construct();
 	$this->load->model('books_model');
 	$this->load->model('notes_model');
+	
   }
   
   public function new_note($isbn){
@@ -31,7 +32,8 @@ class Notes extends CI_Controller {
 	$this->load->library('form_validation');
     $this->form_validation->set_rules('page', 'Page', 'trim|required|integer');
 	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
-
+	$this->form_validation->set_rules('visibility', 'Visibility', 'required');
+	
 	if($this->session->userdata('logged_in')){
 		$isbn = $this->input->post('isbn');
 		$books_item = $this->books_model->get_book(strip_quotes($isbn));
@@ -59,7 +61,7 @@ class Notes extends CI_Controller {
 
 	if (empty($note_item))
 	show_404();
-
+	
 	$data['title'] = 'Note';
 	$data['user_name'] = $this->session->userdata('user_name');
 	
@@ -95,7 +97,7 @@ class Notes extends CI_Controller {
 	$this->load->library('form_validation');
     $this->form_validation->set_rules('page', 'Page', 'trim|required|integer');
 	$this->form_validation->set_rules('content', 'Content', 'trim|required|min_length[10]|max_length[2000]');
-
+	$this->form_validation->set_rules('visibility', 'Visibility', 'required');
 	if($this->session->userdata('logged_in')){
 		$nid = $this->input->post('nid');
 		echo $this->input->post('submit');
