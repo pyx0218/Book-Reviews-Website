@@ -18,7 +18,6 @@ class Books_model extends CI_Model {
 		$table1 = '(select Books.ISBN,count(USER_ID) as COUNT1 from Books left outer join WantsToRead on Books.ISBN=WantsToRead.ISBN group by Books.ISBN) table1';
 		$table2 = '(select Books.ISBN,count(USER_ID) as COUNT2 from Books left outer join Reading on Books.ISBN=Reading.ISBN group by Books.ISBN) table2';
 		$table3 = '(select Books.ISBN,count(USER_ID) as COUNT3 from Books left outer join Read on Books.ISBN=Read.ISBN group by Books.ISBN) table3';
-		//$sql = 'select ISBN from '.$table1.' order by COUNT1 desc';
 		$sql = 'select table1.ISBN from '.$table1.','.$table2.','.$table3.' where table1.ISBN=table2.ISBN and table2.ISBN=table3.ISBN order by COUNT1+COUNT2+COUNT3 desc';
 		$query = $this->db->query($sql);
 		$x=0;
