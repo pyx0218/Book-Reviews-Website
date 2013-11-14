@@ -16,12 +16,20 @@ class Books_model extends CI_Model {
   
 	public function get_popular_books(){
 		$table1 = '(select Books.ISBN,count(USER_ID) as COUNT1 from Books left outer join WantsToRead on Books.ISBN=WantsToRead.ISBN group by Books.ISBN) table1';
-		$table2 = '(select ISBN,count(USER_ID) as COUNT2 from Books left outer join Reading on Books.ISBN=WantsToRead.ISBN group by ISBN) table2';
-		$table3 = '(select ISBN,count(USER_ID) as COUNT3 from Books left outer join Read on Books.ISBN=WantsToRead.ISBN group by ISBN) table3';
-		$sql = 'select table1.ISBN from '.$table1.' order by COUNT1 desc';
-		//$sql = 'select ISBN from '.$table1.','.$table2.','.$table3.' where table1.ISBN=table2.ISBN and table2.ISBN=table3.ISBN order by COUNT1+COUNT2+COUNT3 desc';
+		$table2 = '(select Books.ISBN,count(USER_ID) as COUNT2 from Books left outer join Reading on Books.ISBN=Reading.ISBN group by Books.ISBN) table2';
+		$table3 = '(select Books.ISBN,count(USER_ID) as COUNT3 from Books left outer join Read on Books.ISBN=Read.ISBN group by Books.ISBN) table3';
+		//$sql = 'select ISBN from '.$table1.' order by COUNT1 desc';
+		$sql = 'select table1.ISBN from '.$table1.','.$table2.','.$table3.' where table1.ISBN=table2.ISBN and table2.ISBN=table3.ISBN order by COUNT1+COUNT2+COUNT3 desc';
 		$query = $this->db->query($sql);
-		return $query->result_array();
+		$x=0;
+		foreach($query->result_array() as $row){
+			$info[$x]=$this->books_model->get_book($row['ISBN']);
+			$info[$x]['AUTHORS']=$this->books_model->get_book_authors_name($row['ISBN']);
+			$info[$x]=array_merge($info[$x],$this->books_model->get_book_avgstar($row['ISBN']));
+			$info[$x]=array_merge($info[$x],$this->books_model->get_book_reader_num($row['ISBN']));
+			$x++;
+		}
+		return $info;
 	}
 	
 	public function get_may_like_books(){

@@ -59,7 +59,7 @@
 <div>
 <h3>Reviews</h3>
 <?php foreach ($books_item['REVIEWS'] as $review):?>
-<h4><?php echo $review['RTITLE'] ?></h4>
+<h4><a href="<?php echo site_url('reviews/view/'.$review['RID']) ?>"><?php echo $review['RTITLE'] ?></a></h4>
 <p><a href="<?php echo site_url('users/view/'.$review['USER_ID']) ?>"><?php echo $review['UNAME'] ?></a>&nbsp;&nbsp;<?php echo $review['STARS'] ?> stars</p>
 <div>
 <p><?php echo $review['RCONTENT'] ?></p>
