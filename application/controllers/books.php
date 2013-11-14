@@ -12,12 +12,15 @@ class Books extends CI_Controller {
     $this->load->helper('form');
     $this->load->library('form_validation');
 	
-		$data['title'] = 'Home';
-		$data['user_name'] = $this->session->userdata('user_name');
-		$this->load->view('templates/navigation_view');
-		$this->load->view('books/header', $data);
-		$this->load->view('books/index');
-		$this->load->view('templates/footer');
+	$data['user_loggedin'] = $this->session->userdata('logged_in');
+	$data['popular_books'] = $this->books_model->get_popular_books();
+	$data['may_like_books'] = $this->books_model->get_may_like_books();
+	$data['friend_books'] = $this->books_model->get_friend_books();
+	$this->load->view('templates/navigation_view');
+	$this->load->view('books/header', array('title'=>'Home'));
+	$this->load->view('books/index');
+	$this->load->view('books/personalized_home',$data);
+	$this->load->view('templates/footer');
    
   }
   

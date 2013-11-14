@@ -16,6 +16,7 @@
   <label for="content">Content</label>
   <textarea name="content"><?php echo set_value('content'); ?></textarea></br>
   
-  <input type="submit" name="submit" value="Submit" /> 
+  <input type="submit" name="submit" value="Submit" />
+  <input type="submit" name="cancel" value="Return" /> 
 
 </form>
