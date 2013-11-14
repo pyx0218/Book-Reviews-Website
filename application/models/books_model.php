@@ -13,6 +13,24 @@ class Books_model extends CI_Model {
 	  $query = $this->db->get_where('Books', array('ISBN' => $isbn));
 	  return $query->row_array();
   }
+  
+	public function get_popular_books(){
+		$table1 = '(select Books.ISBN,count(USER_ID) as COUNT1 from Books left outer join WantsToRead on Books.ISBN=WantsToRead.ISBN group by Books.ISBN) table1';
+		$table2 = '(select ISBN,count(USER_ID) as COUNT2 from Books left outer join Reading on Books.ISBN=WantsToRead.ISBN group by ISBN) table2';
+		$table3 = '(select ISBN,count(USER_ID) as COUNT3 from Books left outer join Read on Books.ISBN=WantsToRead.ISBN group by ISBN) table3';
+		$sql = 'select table1.ISBN from '.$table1.' order by COUNT1 desc';
+		//$sql = 'select ISBN from '.$table1.','.$table2.','.$table3.' where table1.ISBN=table2.ISBN and table2.ISBN=table3.ISBN order by COUNT1+COUNT2+COUNT3 desc';
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+	
+	public function get_may_like_books(){
+	
+	}
+	
+	public function get_friend_books(){
+	
+	}
 
 	public function search_books($keyword = FALSE){
 	if ($keyword === FALSE)
@@ -131,7 +149,7 @@ class Books_model extends CI_Model {
 		$this->db->from('Review_GeneratedFrom');
 		$this->db->join('Users','Review_GeneratedFrom.USER_ID=Users.USER_ID');
 		$this->db->where('ISBN',$isbn);
-		$this->db->where('VISIBILITY',1);
+		//$this->db->where('VISIBILITY',1);
 		$query = $this->db->get();
 		
 		return $query->result_array();
