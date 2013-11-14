@@ -50,7 +50,7 @@ class Users extends CI_Controller {
 	else{
 		$this->users_model->add_user();
 		$data['content'] = 'Congradulations! You have successfully finished registration!';
-		$this->load->view('templates/header', array('titel'=>'Succeed'));
+		$this->load->view('templates/header', array('title'=>'Succeed'));
 		$this->load->view('templates/body', $data);
 		$this->load->view('users/login_view');
 		$this->load->view('templates/footer');

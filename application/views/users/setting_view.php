@@ -17,7 +17,7 @@
 	<input type="password" id="con_password" name="con_password" value="<?php echo set_value('con_password'); ?>" />
 	</p>
 	<p>
-	<input type="submit" class="greenButton" value="Submit" />
+	<input type="submit" class="btn" value="Submit" />
 	</p>
 	</form>
 </div>

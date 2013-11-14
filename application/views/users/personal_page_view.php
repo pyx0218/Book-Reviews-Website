@@ -8,11 +8,12 @@
 	echo '<a class="btn" href = "/index.php/users/add_friend/'.$user['user_id'].'">Become Friend!</a>';
 	}?>
 
+<br>
 <?php
 	if($user['admin'] && $user['is_self']){
 		echo '<div>
 			<h3>My monitor operations:</h3>
-			<p><table border="1">
+			<p><table class="table">
 			<tr>
 			<th>Date</th>
 			<th>Review Title</th>

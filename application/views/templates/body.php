@@ -1,1 +1,3 @@
-<h2><?php echo $content ?></h2>
+<div class="container">
+<strong><?php echo $content ?></strong>
+</div>

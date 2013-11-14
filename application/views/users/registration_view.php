@@ -1,7 +1,7 @@
- <?php echo validation_errors('<p class="error">'); ?>
- <?php echo form_open("users/registration"); ?>
  <div class="container">
   <h2>Registration</h2>
+  <?php echo validation_errors('<p class="error">'); ?>
+  <?php echo form_open("users/registration"); ?>
   <p>
   <label for="user_name">Username:</label>
   <input type="text" id="user_name" name="user_name" value="<?php echo set_value('user_name'); ?>" />
