@@ -9,25 +9,26 @@
 		<p><?php echo $books_item['ISBN'] ?></p>
 		<p><?php echo $books_item['STARS']?> stars (<?php echo $books_item['COUNT']?>)</p>
 
-		<?php echo form_open('books/add_reader','',array('isbn'=>$books_item['ISBN'])); ?>
+		<?php echo form_open('books/change_status','',array('isbn'=>$books_item['ISBN'])); ?>
+		<label>I want to read it (<?php echo $books_item['WANTSTOREAD_NUM']?>)</label>
 		<?php if($books_item['WANTSTOREAD_FLAG']): ?>
-		<label>I want to read it</label> 
+		<input type="submit" name="unwanttoread" value="-1" /> 
 		<?php else: ?>
-		<input type="submit" name="wanttoread" value="Want to read" /> 
-		<?php endif ?>
-		(<?php echo $books_item['WANTSTOREAD_NUM']?>)&nbsp;&nbsp; 
+		<input type="submit" name="wanttoread" value="+1" /> 
+		<?php endif ?><br>
+		<label>I am reading it (<?php echo $books_item['READING_NUM']?>)</label>
 		<?php if($books_item['READING_FLAG']): ?>
-		<label>I am reading it</label> 
+		<input type="submit" name="unreading" value="-1" />
 		<?php else: ?>
-		<input type="submit" name="reading" value="Reading" />
-		<?php endif ?>
-		(<?php echo $books_item['READING_NUM']?>)&nbsp;&nbsp; 
+		<input type="submit" name="reading" value="+1" />
+		<?php endif ?><br>
+		<label>I have read it (<?php echo $books_item['READ_NUM']?>)</label>
 		<?php if($books_item['READ_FLAG']): ?>
-		<label>I have read it</label> 
+		<input type="submit" name="unread" value="-1" />
 		<?php else: ?>
-		<input type="submit" name="read" value="Read" />
+		<input type="submit" name="read" value="+1" />
 		<?php endif ?>
-		(<?php echo $books_item['READ_NUM']?>)
+		
 		</form>	
 </div>
 <div>
@@ -59,14 +60,12 @@
 <div>
 <h3>Reviews</h3>
 <?php foreach ($books_item['REVIEWS'] as $review):?>
-<?php if($review['VISIBILITY']==1 or $admin): ?>
 <h4><a href="<?php echo site_url('reviews/view/'.$review['RID']) ?>"><?php echo $review['RTITLE'] ?></a></h4>
 <p><a href="<?php echo site_url('users/view/'.$review['USER_ID']) ?>"><?php echo $review['UNAME'] ?></a>&nbsp;&nbsp;<?php echo $review['STARS'] ?> stars</p>
 <div>
 <p><?php echo $review['RCONTENT'] ?></p>
 </div>
 <p><?php echo $review['RDATE'] ?></p>
-<?php endif ?>
 <?php endforeach ?>
 </div>
 <?php if (!empty($books_item['NOTES'])): ?>

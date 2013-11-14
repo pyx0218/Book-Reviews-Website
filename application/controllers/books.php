@@ -67,27 +67,54 @@ class Books extends CI_Controller {
     
   }
   
-  public function add_reader(){
+  public function change_status(){
 	$this->load->helper('form');
 	if($this->session->userdata('logged_in')){
 		$isbn=$this->input->post('isbn');
-		echo $this->input->post('wanttoread');
-		echo $this->input->post('reading');
-		echo $this->input->post('read');
 		if($this->input->post('wanttoread') != FALSE){
 			$this->books_model->set_wanttoread();
+			redirect('books/view/'.$isbn);
 		}
 		elseif($this->input->post('reading')!= FALSE){
 			$this->books_model->set_reading();
+			redirect('books/view/'.$isbn);
 		}
 		elseif($this->input->post('read')!= FALSE){
 			$this->books_model->set_read();
+			redirect('books/view/'.$isbn);
 		}
-		redirect('books/view/'.$isbn);
+		elseif($this->input->post('unwanttoread')!=FALSE){
+			$this->books_model->reset_wanttoread();
+			redirect('books/view/'.$isbn);
+		}
+		elseif($this->input->post('unreading')!= FALSE){
+			$this->load->view('books/delete_reading',array('isbn'=>$isbn));
+		}
+		elseif($this->input->post('unread')!= FALSE){
+			$this->load->view('books/delete_read',array('isbn'=>$isbn));
+		}
 	}
 	else{
 		redirect('users/login');
 	}
+  }
+  
+  public function delete_reading(){
+	$this->load->helper('form');
+	$isbn=$this->input->post('isbn');
+	if($this->input->post('yes') != FALSE){
+		$this->books_model->reset_reading();
+	}
+	redirect('books/view/'.$isbn);
+  }
+  
+  public function delete_read(){
+	$this->load->helper('form');
+	$isbn=$this->input->post('isbn');
+	if($this->input->post('yes') != FALSE){
+		$this->books_model->reset_read();
+	}
+	redirect('books/view/'.$isbn);
   }
   
   

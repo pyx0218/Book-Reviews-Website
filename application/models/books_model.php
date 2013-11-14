@@ -156,7 +156,7 @@ class Books_model extends CI_Model {
 		$this->db->from('Review_GeneratedFrom');
 		$this->db->join('Users','Review_GeneratedFrom.USER_ID=Users.USER_ID');
 		$this->db->where('ISBN',$isbn);
-		//$this->db->where('VISIBILITY',1);
+		$this->db->where('VISIBILITY',1);
 		$query = $this->db->get();
 		
 		return $query->result_array();
@@ -242,5 +242,29 @@ class Books_model extends CI_Model {
 		if(empty($temp)){
 			$this->db->insert('Read',$data);
 		}
+	}
+	
+	public function reset_wanttoread(){
+		$data = array(
+			'USER_ID' => $this->session->userdata('user_id'),
+			'ISBN' => $this->input->post('isbn'),
+		);
+		$this->db->delete('WantsToRead',$data);
+	}
+	
+	public function reset_reading(){
+		$data = array(
+			'USER_ID' => $this->session->userdata('user_id'),
+			'ISBN' => $this->input->post('isbn'),
+		);
+		$this->db->delete('Reading',$data);
+	}
+	
+	public function reset_read(){
+		$data = array(
+			'USER_ID' => $this->session->userdata('user_id'),
+			'ISBN' => $this->input->post('isbn'),
+		);
+		$this->db->delete('Read',$data);
 	}
 }
