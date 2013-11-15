@@ -25,8 +25,8 @@ class Notes_model extends CI_Model {
 	$query = $this->db->query('
 		insert into note_records (user_id, isbn, ncontent, page, ndate, visibility)
 		values ('.$this->session->userdata('user_id').', \''.$this->input->post('isbn').'\', 
-			'.$content.', '.$this->input->post('page').',
-			to_date(\''.unix_to_human($now).'\',\'YYYY-MM-DD HH:MI AM\'), '.$this->input->post('visibility').')
+			\''.$content.'\', '.$this->input->post('page').',
+			to_date(\''.unix_to_human($now,TRUE).'\',\'YYYY-MM-DD HH:MI:SS AM\'), '.$this->input->post('visibility').')
 	');
 
 	return $this->db->insert_id('nid');
