@@ -63,7 +63,7 @@ class Books_model extends CI_Model {
 				UNION
 				select USER_ID2 as USER_ID 
 				from FRIENDOF where USER_ID1 = '.$user_id;
-			$sql = 'select ISBN from Reading where USER_ID in ('.$friends_id.')';
+			$sql = 'select distinct ISBN from Reading where USER_ID in ('.$friends_id.')';
 			$query = $this->db->query($sql);
 			$x=0;
 			$info=array();
